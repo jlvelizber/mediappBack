@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\ServiceProvider;
+use App\Repositories\Eloquent\UserRepository;
+use App\Repositories\Interface\UserRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -12,8 +14,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
-    }
+        $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
+    } 
 
     /**
      * Bootstrap any application services.
