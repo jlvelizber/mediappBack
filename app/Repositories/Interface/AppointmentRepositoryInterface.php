@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Repositories\Interface;
+use \Illuminate\Database\Eloquent\Collection;
 
 interface AppointmentRepositoryInterface
 {
     /**
      * @param int $doctorId
-     * @return mixed
+     * @return Collection
      */
-    public function findFutureAppointments(int $doctorId);
+    public function findFutureAppointments(int $doctorId): ?Collection;
 }

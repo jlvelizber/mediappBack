@@ -3,16 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\Doctor;
+use App\Services\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class DoctorController extends Controller
 {
+
+    protected UserService $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $doctors = $this->userService->getDoctors();
+        return response()->json($doctors);
     }
 
     /**

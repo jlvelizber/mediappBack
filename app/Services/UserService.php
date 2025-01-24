@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\Interface\UserRepositoryInterface;
+use Illuminate\Database\Eloquent\Collection;
 
 class UserService
 {
@@ -24,5 +25,14 @@ class UserService
     {
         // Validar y procesar datos aquí si es necesario
         return $this->userRepository->all();
+    }
+
+    /**
+     * Summary of getDoctors
+     * @return Collection|null
+     */
+    public function getDoctors(): ?Collection
+    {
+        return $this->userRepository->getDoctors();
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Repositories\Interface;
+use \Illuminate\Database\Eloquent\Collection;
 
 interface UserRepositoryInterface
 {
@@ -13,7 +14,7 @@ interface UserRepositoryInterface
 
 
     /**
-     * @return Model
+     * @return Collection
      */
-    public function getDoctors();
+    public function getDoctors(): ?Collection;
 }

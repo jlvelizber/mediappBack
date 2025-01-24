@@ -3,10 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Services\AppointmentService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AppointmentController extends Controller
 {
+    protected AppointmentService $appointmentService;
+
+    public function __construct(AppointmentService $appointmentService)
+    {
+        $this->appointmentService = $appointmentService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -61,5 +70,11 @@ class AppointmentController extends Controller
     public function destroy(Appointment $appointment)
     {
         //
+    }
+
+    public function futureAppointments(Request $request, int $doctorId): JsonResponse
+    {
+        $appointments = $this->appointmentService->getFutureAppointments($doctorId);
+        return response()->json($appointments);
     }
 }

@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Repositories\Interface\UserRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Enum\UserRoleEnum;
+use Illuminate\Database\Eloquent\Collection;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
@@ -20,9 +21,9 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     }
 
     /**
-     * @return Model
+     * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getDoctors()
+    public function getDoctors(): ?Collection
     {
         return $this->model->where('role', UserRoleEnum::ADMIN->value)->get();
     }
