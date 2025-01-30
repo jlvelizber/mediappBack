@@ -25,6 +25,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     Route::middleware(['role:doctor'])->group(function () {
+
+        Route::apiResource('appointments', AppointmentController::class);
+
         Route::get('/doctor', function () {
             return response()->json(['message' => 'Área de Doctor']);
         });

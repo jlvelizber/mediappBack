@@ -20,5 +20,9 @@ class DatabaseSeeder extends Seeder
             'lastname' => 'Test Lastname',
             'email' => 'jorgeconsalvacion@gmail.com',
         ]);
+
+        $this->call([
+            AppointmentSeeder::class,
+        ]);
     }
 }

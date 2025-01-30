@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Appointment\AppointmentStoreRequest;
+use App\Http\Requests\Appointment\AppointmentUpdateRequest;
+use App\Http\Resources\AppointmentResource;
 use App\Models\Appointment;
 use App\Services\AppointmentService;
 use Illuminate\Http\JsonResponse;
@@ -19,49 +22,38 @@ class AppointmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $appointments = $this->appointmentService->getAllAppointments();
+        return AppointmentResource::collection($appointments)->response();
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(AppointmentStoreRequest $request)
     {
-        //
+        $appointment = $this->appointmentService->createAppointment($request->validated());
+        return AppointmentResource::make($appointment)->response();
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Appointment $appointment)
+    public function show(int $id)
     {
-        //
+        $appointment = $this->appointmentService->getAppointmentById($id);
+        return AppointmentResource::make($appointment)->response();
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Appointment $appointment)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Appointment $appointment)
+    public function update(AppointmentUpdateRequest $request, int $id)
     {
-        //
+        $appointment = $this->appointmentService->updateAppointment($id, $request->validated());
+        return AppointmentResource::make($appointment)->response();
     }
 
     /**
@@ -69,12 +61,16 @@ class AppointmentController extends Controller
      */
     public function destroy(Appointment $appointment)
     {
-        //
+        $this->appointmentService->deleteAppointment($appointment);
+        return response()->json(['message' => 'Appointment deleted']);
     }
 
+    /**
+     * Get future appointments for a doctor.
+     */
     public function futureAppointments(Request $request, int $doctorId): JsonResponse
     {
         $appointments = $this->appointmentService->getFutureAppointments($doctorId);
-        return response()->json($appointments);
+        return AppointmentResource::collection($appointments)->response();
     }
 }
