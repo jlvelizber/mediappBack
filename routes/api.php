@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\PatientController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -35,6 +36,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 
+Route::apiResource('patients', PatientController::class);
 Route::resource('users', UserController::class);
 Route::get('/doctors', [DoctorController::class, 'index']);
 Route::get('/appointments/{doctorId}/future', [AppointmentController::class, 'futureAppointments']);
