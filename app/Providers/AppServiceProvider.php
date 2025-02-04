@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Repositories\Eloquent\AppointmentRepository;
+use App\Repositories\Eloquent\DoctorRepository;
 use App\Repositories\Eloquent\MedicalRecordRepository;
 use App\Repositories\Eloquent\PatientRepository;
 use App\Repositories\Interface\AppointmentRepositoryInterface;
+use App\Repositories\Interface\DoctorRepositoryInterface;
 use App\Repositories\Interface\MedicalRecordRepositoryInterface;
 use App\Repositories\Interface\PatientRepositoryInterface;
 use Illuminate\Auth\Notifications\ResetPassword;
@@ -24,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(AppointmentRepositoryInterface::class, AppointmentRepository::class);
         $this->app->bind(MedicalRecordRepositoryInterface::class, MedicalRecordRepository::class);
         $this->app->bind(PatientRepositoryInterface::class, PatientRepository::class);
+        $this->app->bind(DoctorRepositoryInterface::class, DoctorRepository::class);
     }
 
     /**

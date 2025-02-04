@@ -2,19 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Doctor\DoctorStoreRequest;
+use App\Http\Requests\Doctor\DoctorUpdateRequest;
+use App\Http\Resources\DoctorResource;
 use App\Models\Doctor;
-use App\Services\UserService;
+use App\Services\DoctorService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DoctorController extends Controller
 {
 
-    protected UserService $userService;
+    protected DoctorService $doctorService;
 
-    public function __construct(UserService $userService)
+    public function __construct(DoctorService $doctorService)
     {
-        $this->userService = $userService;
+        $this->doctorService = $doctorService;
     }
 
     /**
@@ -22,55 +27,43 @@ class DoctorController extends Controller
      */
     public function index(): JsonResponse
     {
-        $doctors = $this->userService->getDoctors();
-        return response()->json($doctors);
+        $doctors = $this->doctorService->getAllDoctors();
+        return DoctorResource::collection($doctors)->response();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(DoctorStoreRequest $request)
     {
-        //
+        $doctor = $this->doctorService->createDoctor($request->all());
+        return DoctorResource::make($doctor)->response();
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Doctor $doctor)
+    public function show(int $doctor)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Doctor $doctor)
-    {
-        //
+        $doctor = $this->doctorService->getDoctorById($doctor);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Doctor $doctor)
+    public function update(DoctorUpdateRequest $request, int $doctor)
     {
-        //
+        $doctor = $this->doctorService->updateDoctor($doctor, $request->all());
+        return DoctorResource::make($doctor)->response();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Doctor $doctor)
+    public function destroy(int $doctor)
     {
-        //
+        $this->doctorService->deleteDoctor($doctor);
+        return response()->json(['message' => 'Doctor deleted successfully']);
     }
 }
