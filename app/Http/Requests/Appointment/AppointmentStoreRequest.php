@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Appointment;
 
+use App\Enum\AppointmentStatusEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class AppointmentStoreRequest extends FormRequest
 {
@@ -22,10 +24,11 @@ class AppointmentStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'doctor_id' => 'required|exists:users,id',
+            'doctor_id' => 'required|exists:doctors,id',
             'patient_id' => 'required|exists:patients,id',
-            'date' => 'required|date',
-            'status' => 'in:pending,confirmed,cancelled',
+            'date_time' => 'required|date',
+            'status' => Rule::in(array_column(AppointmentStatusEnum::cases(), 'value')),
+            'reason' => 'string',
         ];
     }
 }

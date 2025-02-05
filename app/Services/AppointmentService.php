@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use App\Models\Appointment;
 use App\Repositories\Interface\AppointmentRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AppointmentService
 {
@@ -31,26 +34,32 @@ class AppointmentService
 
     public function getAppointmentById($id)
     {
-        return $this->appointmentRepository->find($id);
+        $appointment = $this->appointmentRepository->find($id);
+        if (!$appointment)
+            throw new NotFoundHttpException("Appointment not found", null, Response::HTTP_NOT_FOUND);
+        return $appointment;
     }
 
-    public function createAppointment(array $data)
+    public function createAppointment(array $data): Appointment
     {
-        // Validaciones personalizadas
-        if (!$data['doctor_id'] || !$data['patient_id']) {
-            throw ValidationException::withMessages(['error' => 'El doctor y el paciente son obligatorios.']);
-        }
-
         return $this->appointmentRepository->create($data);
     }
 
-    public function updateAppointment($id, array $data)
+    public function updateAppointment($id, array $data): Appointment|null
     {
-        return $this->appointmentRepository->update($id, $data);
+        $this->getAppointmentById($id);
+
+        $wasUpdated = $this->appointmentRepository->update($id, $data);
+        if (!$wasUpdated) {
+            throw ValidationException::withMessages(['appointment' => 'Appointment was not updated']);
+        }
+        return $this->getAppointmentById($id);
     }
 
     public function deleteAppointment($id)
     {
+        $this->getAppointmentById($id);
+
         return $this->appointmentRepository->delete($id);
     }
 }

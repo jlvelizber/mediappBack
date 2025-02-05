@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Appointment;
 
+use App\Enum\AppointmentStatusEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class AppointmentUpdateRequest extends FormRequest
 {
@@ -23,7 +25,8 @@ class AppointmentUpdateRequest extends FormRequest
     {
         return [
             'date' => 'sometimes|date',
-            'status' => 'sometimes|in:pending,confirmed,cancelled',
+            'date_time' => 'sometimes|date',
+            'status' => Rule::in(array_column(AppointmentStatusEnum::cases(), 'value')),
         ];
     }
 }

@@ -59,7 +59,7 @@ class DoctorService
         return $doctor;
     }
 
-    public function deleteDoctor($id)
+    public function deleteDoctor($id): bool
     {
         $doctor = $this->getDoctorById($id);
         $this->userRepositoryInterface->delete($doctor->user_id);

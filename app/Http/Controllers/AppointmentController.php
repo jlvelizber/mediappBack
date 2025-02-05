@@ -59,7 +59,7 @@ class AppointmentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Appointment $appointment)
+    public function destroy(int $appointment)
     {
         $this->appointmentService->deleteAppointment($appointment);
         return response()->json(['message' => 'Appointment deleted']);
