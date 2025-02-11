@@ -31,13 +31,14 @@ class AuthenticatedSessionController extends Controller
         return response()->json([
             'token' => $token,
             'user' => $user,
-        ]);
+        ])->cookie('role', $user->role, 60 * 24, '/', 'localhost', false, false);
+
     }
 
     /**
      * Destroy an authenticated session.
      */
-    public function destroy(Request $request): Response
+    public function destroy(Request $request): JsonResponse
     {
         $request->user()->tokens()->delete();
 
