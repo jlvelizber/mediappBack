@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DoctorAvailabilityController;
+use App\Http\Controllers\Doctor\DoctorAvailabilityController as DoctorOwnAvailabilityController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
 use Illuminate\Http\Request;
@@ -24,12 +25,17 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/admin', function () {
             return response()->json(['message' => 'Área de Admin']);
         });
+        Route::apiResource('doctor.availabilities', DoctorAvailabilityController::class, ['only' => ['index', 'store', 'update', 'destroy']]);
     });
 
     Route::middleware(['role:doctor'])->group(function () {
 
+        // available times for the doctor
+        Route::apiResource('availabilities', DoctorOwnAvailabilityController::class, [
+            'only' => ['index', 'store'],
+        ]);
+
         Route::apiResource('appointments', AppointmentController::class);
-        Route::apiResource('doctor.availabilities', DoctorAvailabilityController::class, ['only' => ['index', 'store', 'update', 'destroy']]);
 
         Route::get('/doctor', function () {
             return response()->json(['message' => 'Área de Doctor']);
