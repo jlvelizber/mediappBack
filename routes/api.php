@@ -4,9 +4,9 @@ use App\Http\Controllers\Admin\{
     DoctorAvailabilityController as AdminDoctorAvailabilityController
 };
 use App\Http\Controllers\Doctor\{
-    DoctorAvailabilityController as DoctorDoctorAvailabilityController
+    DoctorAvailabilityController as DoctorDoctorAvailabilityController,
+    AppointmentController
 };
-use App\Http\Controllers\Doctor\AppointmentController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
 use Illuminate\Http\Request;
