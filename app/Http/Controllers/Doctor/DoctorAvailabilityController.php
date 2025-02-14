@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Doctor;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\DoctorAvailabilityStoreOwnRequest;
-use App\Http\Requests\DoctorAvailabilityStoreRequest;
-use App\Http\Requests\DoctorAvailabilityUpdateRequest;
+use App\Http\Requests\Doctor\DoctorAvailabilityStoreRequest;
 use App\Http\Resources\DoctorAvailabilityResource;
 use App\Services\DoctorAvailabilityService;
 use Illuminate\Http\Request;
@@ -35,10 +33,11 @@ class DoctorAvailabilityController extends Controller
     }
 
 
-    public function store(DoctorAvailabilityStoreOwnRequest $request)
+    public function store(DoctorAvailabilityStoreRequest $request)
     {
         $doctorId = $request->user()->doctor->id;
-        $doctorAvailability = $this->doctorAvailabilityService->createAvailability(array_merge($request->all(), ['doctor_id' => $doctorId]));
+        $dataSave = array_merge($request->all(), ['doctor_id', $doctorId]);
+        $doctorAvailability = $this->doctorAvailabilityService->createAvailability($dataSave);
         return new DoctorAvailabilityResource($doctorAvailability);
     }
 }

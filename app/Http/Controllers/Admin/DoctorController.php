@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Doctor\DoctorStoreRequest;
-use App\Http\Requests\Doctor\DoctorUpdateRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\DoctorStoreRequest;
+use App\Http\Requests\Admin\DoctorUpdateRequest;
 use App\Http\Resources\DoctorResource;
-use App\Models\Doctor;
 use App\Services\DoctorService;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DoctorController extends Controller
 {
@@ -35,7 +32,7 @@ class DoctorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(DoctorStoreRequest $request)
+    public function store(DoctorStoreRequest $request): JsonResponse
     {
         $doctor = $this->doctorService->createDoctor($request->all());
         return DoctorResource::make($doctor)->response();
@@ -44,9 +41,10 @@ class DoctorController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $doctor)
+    public function show(int $doctor): JsonResponse
     {
         $doctor = $this->doctorService->getDoctorById($doctor);
+        return DoctorResource::make($doctor)->response();
     }
 
     /**

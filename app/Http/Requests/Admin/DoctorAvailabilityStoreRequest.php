@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Doctor;
+namespace App\Http\Requests\Admin;
 
-use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DoctorStoreRequest extends FormRequest
+class DoctorAvailabilityStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,11 +22,10 @@ class DoctorStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'lastname' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', 'min:8'],
-            'specialization' => ['required', 'string', 'max:255'],
+            'doctor_id' => 'required|exists:doctors,id',
+            'day_of_week' => 'required|string',
+            'start_time' => 'required',
+            'end_time' => 'required',
         ];
     }
 }

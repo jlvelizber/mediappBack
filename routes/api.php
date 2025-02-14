@@ -1,8 +1,12 @@
 <?php
 
-use App\Http\Controllers\AppointmentController;
-use App\Http\Controllers\DoctorAvailabilityController;
-use App\Http\Controllers\Doctor\DoctorAvailabilityController as DoctorOwnAvailabilityController;
+use App\Http\Controllers\Admin\{
+    DoctorAvailabilityController as AdminDoctorAvailabilityController
+};
+use App\Http\Controllers\Doctor\{
+    DoctorAvailabilityController as DoctorDoctorAvailabilityController
+};
+use App\Http\Controllers\Doctor\AppointmentController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
 use Illuminate\Http\Request;
@@ -16,24 +20,37 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/dashboard', function () {
-        return response()->json(['message' => 'Bienvenido al Dashboard']);
-    });
-
+    // Admin Routes
     Route::middleware(['role:admin'])->group(function () {
-        Route::get('/admin', function () {
-            return response()->json(['message' => 'Área de Admin']);
-        });
-        Route::apiResource('doctor.availabilities', DoctorAvailabilityController::class, ['only' => ['index', 'store', 'update', 'destroy']]);
+
+        Route::apiResource('/doctors', DoctorController::class);
+
+        Route::apiResource(
+            'doctor.availabilities',
+            AdminDoctorAvailabilityController::class,
+            [
+                'only' =>
+                    ['index', 'store', 'update', 'destroy']
+            ]
+        );
     });
 
+
+
+
+    // Doctor Rooutes
     Route::middleware(['role:doctor'])->group(function () {
 
         // available times for the doctor
-        Route::apiResource('availabilities', DoctorOwnAvailabilityController::class, [
-            'only' => ['index', 'store'],
-        ]);
+        Route::apiResource(
+            'availabilities',
+            DoctorDoctorAvailabilityController::class,
+            [
+                'only' => ['index', 'store'],
+            ]
+        );
 
         Route::apiResource('appointments', AppointmentController::class);
 
@@ -47,7 +64,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 Route::apiResource('patients', PatientController::class);
 Route::resource('users', UserController::class);
-Route::apiResource('/doctors', DoctorController::class);
+
 Route::get('/appointments/{doctorId}/future', [AppointmentController::class, 'futureAppointments']);
 
 

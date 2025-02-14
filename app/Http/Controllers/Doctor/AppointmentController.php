@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Appointment\AppointmentStoreRequest;
 use App\Http\Requests\Appointment\AppointmentUpdateRequest;
 use App\Http\Resources\AppointmentResource;
-use App\Models\Appointment;
 use App\Services\AppointmentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class AppointmentController extends Controller
 {
