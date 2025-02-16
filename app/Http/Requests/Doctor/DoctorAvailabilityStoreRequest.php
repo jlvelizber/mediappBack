@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Doctor;
 
+use App\Enum\UserRoleEnum;
 use Illuminate\Foundation\Http\FormRequest;
 
 class DoctorAvailabilityStoreRequest extends FormRequest
@@ -11,7 +12,7 @@ class DoctorAvailabilityStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user()->role == UserRoleEnum::DOCTOR->value;
     }
 
     /**

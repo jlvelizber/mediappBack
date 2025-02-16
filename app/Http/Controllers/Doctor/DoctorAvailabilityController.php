@@ -32,12 +32,26 @@ class DoctorAvailabilityController extends Controller
         return DoctorAvailabilityResource::collection($availabitilies);
     }
 
-
+    /**
+     * Save a new Availability
+     * @param \App\Http\Requests\Doctor\DoctorAvailabilityStoreRequest $request
+     * @return DoctorAvailabilityResource
+     */
     public function store(DoctorAvailabilityStoreRequest $request)
     {
         $doctorId = $request->user()->doctor->id;
-        $dataSave = array_merge($request->all(), ['doctor_id', $doctorId]);
+        $dataSave = array_merge($request->all(), ['doctor_id' => $doctorId]);
         $doctorAvailability = $this->doctorAvailabilityService->createAvailability($dataSave);
         return new DoctorAvailabilityResource($doctorAvailability);
     }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(int $doctorAvailability)
+    {
+        $this->doctorAvailabilityService->deleteAvailability($doctorAvailability);
+        return response()->json(['message' => 'Doctor Availability deleted']);
+    }
+
 }
