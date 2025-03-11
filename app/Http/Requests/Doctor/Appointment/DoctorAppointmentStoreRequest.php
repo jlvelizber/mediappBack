@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Doctor;
+namespace App\Http\Requests\Doctor\Appointment;
 
 use App\Enum\AppointmentStatusEnum;
 use App\Helpers\ValidationHelpers;

@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\Doctor;
 
-use App\Http\Requests\Appointment\AppointmentUpdateRequest;
-use App\Http\Requests\Doctor\DoctorAppointmentStoreRequest;
+use App\Http\Requests\Doctor\Appointment\{DoctorAppointmentStoreRequest, DoctorAppointmentUpdateRequest};
 use App\Http\Resources\AppointmentResource;
 use App\Services\AppointmentService;
 use Illuminate\Http\JsonResponse;
@@ -50,7 +49,7 @@ class AppointmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(AppointmentUpdateRequest $request, int $id)
+    public function update(DoctorAppointmentUpdateRequest $request, int $id)
     {
         $appointment = $this->appointmentService->updateAppointment($id, $request->validated());
         return AppointmentResource::make($appointment)->response();

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Doctor;
+namespace App\Http\Requests\Doctor\DoctorAvailability;
 
 use App\Enum\UserRoleEnum;
 use Illuminate\Foundation\Http\FormRequest;

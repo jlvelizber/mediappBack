@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Doctor;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Doctor\DoctorAvailabilityStoreRequest;
+use App\Http\Requests\Doctor\DoctorAvailability\DoctorAvailabilityStoreRequest;
 use App\Http\Resources\DoctorAvailabilityResource;
 use App\Services\DoctorAvailabilityService;
 use Illuminate\Http\Request;
@@ -34,7 +34,7 @@ class DoctorAvailabilityController extends Controller
 
     /**
      * Save a new Availability
-     * @param \App\Http\Requests\Doctor\DoctorAvailabilityStoreRequest $request
+     * @param \App\Http\Requests\Doctor\DoctorAvailability\DoctorAvailabilityStoreRequest$request
      * @return DoctorAvailabilityResource
      */
     public function store(DoctorAvailabilityStoreRequest $request)

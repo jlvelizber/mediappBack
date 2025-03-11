@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\DoctorAvailabilityStoreRequest;
-use App\Http\Requests\Admin\DoctorAvailabilityUpdateRequest;
+use App\Http\Requests\Admin\DoctorAvailability\{DoctorAvailabilityStoreRequest, DoctorAvailabilityUpdateRequest};
 use App\Http\Resources\DoctorAvailabilityResource;
 use App\Services\DoctorAvailabilityService;
 
