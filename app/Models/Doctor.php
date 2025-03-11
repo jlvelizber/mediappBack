@@ -9,10 +9,6 @@ class Doctor extends Model
 {
     use HasFactory;
 
-
-    protected $with = ['user'];
-
-
     protected $fillable = [
         'user_id',
         'specialization'

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Resources\AuthUserLoggedResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
@@ -27,11 +28,10 @@ class AuthenticatedSessionController extends Controller
         }
 
         $token = $user->createToken('auth-token')->plainTextToken;
+        $user->token = $token;
+        return AuthUserLoggedResource::make($user)->response()->cookie('role', $user->role, 60 * 24, '/', 'localhost', false, false);
+        ;
 
-        return response()->json([
-            'token' => $token,
-            'user' => $user,
-        ])->cookie('role', $user->role, 60 * 24, '/', 'localhost', false, false);
 
     }
 

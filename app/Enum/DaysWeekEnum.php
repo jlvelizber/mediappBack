@@ -25,4 +25,19 @@ enum DaysWeekEnum: string
             self::SUNDAY->name => self::SUNDAY->value,
         ];
     }
+
+
+    public static function getKeyByIndex(int $index): string
+    {
+        return match ($index) {
+            0 => strtolower(self::SUNDAY->name),
+            1 => strtolower(self::MONDAY->name),
+            2 => strtolower(self::TUESDAY->name),
+            3 => strtolower(self::WEDNESDAY->name),
+            4 => strtolower(self::THURSDAY->name),
+            5 => strtolower(self::FRIDAY->name),
+            6 => strtolower(self::SATURDAY->name),
+            default => strtolower(self::SUNDAY->name),
+        };
+    }
 }
