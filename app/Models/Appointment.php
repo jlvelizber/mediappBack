@@ -13,6 +13,7 @@ class Appointment extends Model
         'date_time',
         'status',
         'reason',
+        'duration_minutes',
     ];
 
 

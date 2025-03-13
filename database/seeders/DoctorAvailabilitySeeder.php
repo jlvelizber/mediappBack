@@ -13,6 +13,6 @@ class DoctorAvailabilitySeeder extends Seeder
      */
     public function run(): void
     {
-        DoctorAvailability::factory(10)->create();
+        DoctorAvailability::factory()->count(10)->create();
     }
 }

@@ -6,13 +6,31 @@ use App\Enum\AppointmentStatusEnum;
 use App\Models\Appointment;
 use App\Repositories\Interface\AppointmentRepositoryInterface;
 use App\Repositories\BaseRepository;
+use App\Repositories\Interface\DoctorConfigurationRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 
 class AppointmentRepository extends BaseRepository implements AppointmentRepositoryInterface
 {
-    public function __construct(Appointment $model)
+    private DoctorConfigurationRepositoryInterface $doctorConfigurationRepositoryInterface;
+
+    public function __construct(Appointment $model, DoctorConfigurationRepositoryInterface $doctorConfigurationRepositoryInterface)
     {
         parent::__construct($model);
+        $this->doctorConfigurationRepositoryInterface = $doctorConfigurationRepositoryInterface;
+    }
+
+    public function create(array $data): \Illuminate\Database\Eloquent\Model
+    {
+        if (!isset($data['status'])) {
+            $data['status'] = AppointmentStatusEnum::PENDING;
+        }
+
+        if (!isset($data['duration_minutes'])) {
+            $keyColumn = 'default_appointment_duration';
+            $duration = $this->doctorConfigurationRepositoryInterface->getByDoctorIdAndKeyValue($data['doctor_id'], $keyColumn)->$keyColumn ?? config('mediapp.doctor_configuration.default_appointment_duration');
+            $data['duration_minutes'] = $duration;
+        }
+        return $this->model->create($data);
     }
 
     /**
