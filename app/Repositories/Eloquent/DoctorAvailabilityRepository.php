@@ -19,4 +19,17 @@ class DoctorAvailabilityRepository extends BaseRepository implements DoctorAvail
     {
         return $this->model->where('doctor_id', $doctorId)->get();
     }
+
+    /**
+     * Summary of getFirstByDoctorAndDay
+     * @param int $doctorId
+     * @param string $dayOfWeek
+     * @return TModel|null
+     */
+    public function getFirstByDoctorAndDay(int $doctorId, string $dayOfWeek): DoctorAvailability|null
+    {
+        return $this->model->where('doctor_id', $doctorId)->where('day_of_week', $dayOfWeek)->first();
+    }
+
+
 }

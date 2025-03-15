@@ -18,13 +18,13 @@ class DoctorAvailabilityResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'day_of_week' => Lang::get($this->getDayOfWeek($this->day_of_week)),
+            'day_of_week' => Lang::get($this->getDayOfWeekTranslated($this->day_of_week)),
             'start_time' => $this->start_time,
             'end_time' => $this->end_time,
         ];
     }
 
-    private function getDayOfWeek($dayOfWeek): string
+    private function getDayOfWeekTranslated($dayOfWeek): string
     {
         $days = DaysWeekEnum::toArray();
         return $days[strtoupper($dayOfWeek)];

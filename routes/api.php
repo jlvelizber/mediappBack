@@ -48,9 +48,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
             'availabilities',
             DoctorDoctorAvailabilityController::class,
             [
-                'only' => ['index', 'store', 'destroy'],
+                'only' => ['index', 'store', 'destroy']
             ]
         );
+
+        Route::group([
+            'prefix' => 'availabilities',
+        ], function () {
+            Route::get('get-available-slots', [DoctorDoctorAvailabilityController::class, 'getAvailableSlots']);
+        });
+
 
         Route::apiResource('appointments', AppointmentController::class);
     });

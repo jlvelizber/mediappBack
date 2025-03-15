@@ -54,4 +54,13 @@ class DoctorAvailabilityController extends Controller
         return response()->json(['message' => 'Doctor Availability deleted']);
     }
 
+
+    public function getAvailableSlots(Request $request)
+    {
+        $doctorId = $request->user()->doctor->id;
+        $date = $request->date;
+        $availabitilies = $this->doctorAvailabilityService->getAvailableSlots($doctorId, $date);
+        return response()->json(['data' => $availabitilies]);
+    }
+
 }
