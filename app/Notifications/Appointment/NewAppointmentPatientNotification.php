@@ -2,6 +2,7 @@
 
 namespace App\Notifications\Appointment;
 
+use App\Broadcasting\WhatsappChannel;
 use App\Models\Appointment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -28,7 +29,7 @@ class NewAppointmentPatientNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', WhatsappChannel::class];
     }
 
     /**
@@ -56,6 +57,23 @@ class NewAppointmentPatientNotification extends Notification
     {
         return [
             //
+        ];
+    }
+
+    /**
+     * Get the whatsapp representation of the notification.
+     *
+     * @return array<string, mixed>
+     */
+    public function toWhatsapp(object $notifiable): array
+    {
+        return [
+            'template' => __('app.notifications.appointment_patient_notification_whatsapp', [
+                'doctor' => $this->appointment->doctor->user->fullName,
+                'specialization' => $this->appointment->doctor->specialization,
+                'date_time' => $this->appointment->date_time,
+            ]),
+            'parameters' => [],
         ];
     }
 }
