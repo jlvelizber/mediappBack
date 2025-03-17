@@ -16,5 +16,25 @@ return [
         'appointment_confirmed' => 'Cita confirmada',
         'doctor_is_bussy' => 'Este horario ya está ocupado.'
     ],
+    'notifications' => [
+        'appointment_scheduled' => 'Nueva Cita agendada',
+        'appointment_created' => 'Nueva Cita creada',
+        'appointment_updated' => 'Cita actualizada',
+        'appointment_deleted' => 'Cita eliminada',
+        'appointment_confirmed' => 'Cita confirmada',
+        'appointment_canceled' => 'Cita cancelada',
+        'appointment_rescheduled' => 'Cita reprogramada',
+        'appointment_notification' => 'Notificación de cita',
+        'appointment_notification_message' => 'Tienes una nueva cita programada.',
+        'appointment_notification_action' => 'Ver cita',
+        'appointment_notification_thanks' => 'Gracias por usar nuestra aplicación!',
+        'appointment_notification_greeting' => 'Hola!',
+        'appointment_patient_notification_line1' => 'Tienes una nueva cita programada con el doctor :doctor con la especialidad :specialization',
+        'appointment_patient_notification_line2' => 'El doctor te atenderá el',
+        'appointment_doctor_notification_line1' => 'Tienes una nueva cita programada con el paciente :patient',
+        'appointment_doctor_notification_line2' => 'El paciente te visitará el',
+        'appointment_doctor_notification_action_line' => 'Ver cita',
+        'appointment_doctor_notification_thanks' => 'Gracias por usar nuestra aplicación!',
+    ],
 
 ];

@@ -49,7 +49,7 @@ class DoctorAppointmentStoreRequest extends FormRequest
                 new DoctorHasNoConflictRule($this->doctor_id, $this->date_time),
             ],
             'status' => Rule::in(array_column(AppointmentStatusEnum::cases(), 'value')),
-            'reason' => 'string',
+            'reason' => 'required|string',
         ];
     }
 
@@ -64,7 +64,8 @@ class DoctorAppointmentStoreRequest extends FormRequest
             $dateTime = $this->input('date_time');
             $doctorId = $this->input('doctor_id');
             $durationMinutes = $this->doctorConfigurationRepositoryInterface->getByDoctorIdAndKeyValue($doctorId, 'default_appointment_duration')->default_appointment_duration ?? config('mediapp.appointment.default_duration_minutes');
-            $endTime = Carbon::parse($dateTime)->addMinutes((int) $durationMinutes);
+            (int) $durationMinutes--;
+            $endTime = Carbon::parse($dateTime)->addMinutes($durationMinutes);
 
             $overlappingAppointment = Appointment::where('doctor_id', $doctorId)
                 ->where(function ($query) use ($dateTime, $endTime, $durationMinutes) {

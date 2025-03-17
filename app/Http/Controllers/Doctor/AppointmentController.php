@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Doctor;
 
+use App\Events\AppointmentCreated;
 use App\Http\Requests\Doctor\Appointment\{DoctorAppointmentStoreRequest, DoctorAppointmentUpdateRequest};
 use App\Http\Resources\AppointmentResource;
 use App\Services\AppointmentService;
@@ -33,6 +34,7 @@ class AppointmentController extends Controller
     public function store(DoctorAppointmentStoreRequest $request)
     {
         $appointment = $this->appointmentService->createAppointment($request->all());
+        event(new AppointmentCreated($appointment));
         return AppointmentResource::make($appointment)->response();
     }
 
