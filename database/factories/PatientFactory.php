@@ -18,6 +18,7 @@ class PatientFactory extends Factory
     public function definition(): array
     {
         return [
+            'doctor_id' => Factory::factoryForModel('Doctor'),
             'document' => $this->faker->unique()->randomNumber(8),
             'name' => $this->faker->firstName,
             'lastname' => $this->faker->lastName,

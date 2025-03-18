@@ -6,6 +6,7 @@ use App\Models\Patient;
 use App\Repositories\Interface\PatientRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -52,5 +53,16 @@ class PatientService
     public function deletePatient($id)
     {
         return $this->patientRepository->delete($id);
+    }
+
+    /**
+     * Summary of paginatePatientByDoctorId
+     * @param mixed $doctorId
+     * @param mixed $perPage
+     * @return LengthAwarePaginator
+     */
+    public function paginatePatientByDoctorId($doctorId): LengthAwarePaginator
+    {
+        return $this->patientRepository->paginatePatientsByDoctorId($doctorId);
     }
 }

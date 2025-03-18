@@ -5,10 +5,11 @@ use App\Http\Controllers\Admin\{
 };
 use App\Http\Controllers\Doctor\{
     DoctorAvailabilityController as DoctorDoctorAvailabilityController,
-    AppointmentController
+    AppointmentController as DoctorAppointmentController,
+    PatientController as DoctorPatientController
 };
 use App\Http\Controllers\Admin\DoctorController;
-use App\Http\Controllers\PatientController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -59,15 +60,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
         });
 
 
-        Route::apiResource('appointments', AppointmentController::class);
+        Route::apiResource('appointments', DoctorAppointmentController::class);
+
+        Route::apiResource('patients', DoctorPatientController::class);
     });
 });
 
 
-Route::apiResource('patients', PatientController::class);
 Route::resource('users', UserController::class);
 
-Route::get('/appointments/{doctorId}/future', [AppointmentController::class, 'futureAppointments']);
+Route::get('/appointments/{doctorId}/future', [DoctorAppointmentController::class, 'futureAppointments']);
 
 
 

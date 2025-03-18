@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Doctor;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Patient\PatientStoreRequest;
 use App\Http\Requests\Patient\PatientUpdateRequest;
 use App\Http\Resources\PatientResource;
-use App\Models\Patient;
 use App\Services\PatientService;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
 class PatientController extends Controller
@@ -23,9 +24,10 @@ class PatientController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $patients = $this->patientService->getAllPatients();
+        $doctorId = $request->user()->doctor->id;
+        $patients = $this->patientService->paginatePatientByDoctorId($doctorId);
         return PatientResource::collection($patients)->response();
     }
 
