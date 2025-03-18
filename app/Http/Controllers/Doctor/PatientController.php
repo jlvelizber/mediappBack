@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Doctor;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Patient\PatientStoreRequest;
 use App\Http\Requests\Patient\PatientUpdateRequest;
+use App\Http\Resources\PatientPaginateResource;
 use App\Http\Resources\PatientResource;
 use App\Services\PatientService;
 use Illuminate\Http\Request;
@@ -68,5 +69,13 @@ class PatientController extends Controller
     {
         $this->patientService->deletePatient($patient);
         return response()->json(['message' => 'Patient deleted successfully']);
+    }
+
+
+    public function paginate(Request $request): JsonResponse
+    {
+        $doctorId = $request->user()->doctor->id;
+        $patients = $this->patientService->paginatePatientByDoctorId($doctorId);
+        return PatientPaginateResource::collection($patients)->response();
     }
 }
