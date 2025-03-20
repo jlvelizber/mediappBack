@@ -15,4 +15,10 @@ interface PatientRepositoryInterface
      * @return Collection
      */
     public function paginatePatientsByDoctorId(int $doctorId): LengthAwarePaginator;
+
+
+    /**
+     * Paginate and query data 
+     */
+    public function queryPaginatePatientsByDoctorId(int $doctorId, string $query): LengthAwarePaginator;
 }

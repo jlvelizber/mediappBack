@@ -16,6 +16,7 @@ class PatientPaginateResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'document' => $this->document,
             'name' => $this->full_name,
             'email' => $this->email,
             'phone' => $this->phone

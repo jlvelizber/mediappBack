@@ -14,7 +14,7 @@ class PatientService
 {
     protected PatientRepositoryInterface $patientRepository;
 
-    public function __construct(patientRepositoryInterface $patientRepository)
+    public function __construct(PatientRepositoryInterface $patientRepository)
     {
         $this->patientRepository = $patientRepository;
     }
@@ -64,5 +64,11 @@ class PatientService
     public function paginatePatientByDoctorId($doctorId): LengthAwarePaginator
     {
         return $this->patientRepository->paginatePatientsByDoctorId($doctorId);
+    }
+
+
+    public function queryPaginatePatientByDoctorId($doctorId, $query): LengthAwarePaginator
+    {
+        return $this->patientRepository->queryPaginatePatientsByDoctorId($doctorId, $query);
     }
 }

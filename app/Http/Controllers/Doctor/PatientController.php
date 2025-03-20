@@ -75,7 +75,13 @@ class PatientController extends Controller
     public function paginate(Request $request): JsonResponse
     {
         $doctorId = $request->user()->doctor->id;
-        $patients = $this->patientService->paginatePatientByDoctorId($doctorId);
+        if ($request->has('query')) {
+            $query = $request->get('query');
+            $patients = $this->patientService->queryPaginatePatientByDoctorId($doctorId, $query);
+        } else {
+
+            $patients = $this->patientService->paginatePatientByDoctorId($doctorId);
+        }
         return PatientPaginateResource::collection($patients)->response();
     }
 }
