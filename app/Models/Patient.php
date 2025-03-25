@@ -18,7 +18,8 @@ class Patient extends Model
         'address',
         'dob',
         'document',
-        'gender'
+        'gender',
+        'doctor_id'
     ];
 
     /**

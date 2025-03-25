@@ -29,7 +29,7 @@ class PatientStoreRequest extends FormRequest
             'document' => 'required|string|unique:patients,document',
             'email' => 'required|email|unique:patients,email',
             'phone' => 'required|string',
-            'address' => 'required|string',
+            'address' => 'string',
             'dob' => 'required|date',
             'gender' => Rule::enum(PatientGender::class)
         ];

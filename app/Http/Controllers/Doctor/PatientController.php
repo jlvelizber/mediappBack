@@ -38,6 +38,8 @@ class PatientController extends Controller
      */
     public function store(PatientStoreRequest $request): JsonResponse
     {
+        $doctorId = $request->user()->doctor->id;
+        $request->merge(['doctor_id' => $doctorId]);
         $patient = $this->patientService->createPatient($request->all());
         return PatientResource::make($patient)->response();
 
