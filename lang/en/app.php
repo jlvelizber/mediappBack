@@ -37,4 +37,14 @@ return [
         'appointment_doctor_notification_action_line' => 'View appointment',
         'appointment_doctor_notification_thanks' => 'Thank you for using our application!',
     ],
+    'patients' => [
+        'name' => 'Name',
+        'lastname' => 'Lastname',
+        'document' => 'Document',
+        'email' => 'Email',
+        'phone' => 'Phone',
+        'address' => 'Address',
+        'dob' => 'Date of birth',
+        'gender' => 'Gender'
+    ]
 ];

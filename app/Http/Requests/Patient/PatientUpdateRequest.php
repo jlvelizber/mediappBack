@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Patient;
 
+use App\Enum\PatientGender;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PatientUpdateRequest extends FormRequest
 {
@@ -22,13 +24,29 @@ class PatientUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'string',
-            'lastname' => 'string',
-            'document' => 'string|unique:patients,document,' . $this->route('patient'),
+            'name' => 'string|min:3|max:255',
+            'lastname' => 'string|min:3|max:255',
+            'document' => 'string|unique:patients,document,' . $this->route('patient') . '|max:10',
             'email' => 'email|unique:patients,email,' . $this->route('patient'),
-            'phone' => 'string',
-            'address' => 'string',
+            'phone' => 'string|max:10',
+            'address' => 'string|max:255',
             'dob' => 'date',
+            'gender' => Rule::enum(PatientGender::class)
+        ];
+    }
+
+
+    public function attributes(): array
+    {
+        return [
+            'name' => __('app.patients.name'),
+            'lastname' => __('app.patients.lastname'),
+            'document' => __('app.patients.document'),
+            'email' => __('app.patients.email'),
+            'phone' => __('app.patients.phone'),
+            'address' => __('app.patients.address'),
+            'dob' => __('app.patients.dob'),
+            'gender' => __('app.patients.gender')
         ];
     }
 }

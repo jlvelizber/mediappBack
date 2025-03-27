@@ -36,5 +36,15 @@ return [
         'appointment_doctor_notification_action_line' => 'Ver cita',
         'appointment_doctor_notification_thanks' => 'Gracias por usar nuestra aplicación!',
     ],
+    'patients' => [
+        'name' => 'Nombre',
+        'lastname' => 'Apellido',
+        'document' => 'Documento',
+        'email' => 'Correo electrónico',
+        'phone' => 'Teléfono',
+        'address' => 'Dirección',
+        'dob' => 'Fecha de nacimiento',
+        'gender' => 'Género'
+    ]
 
 ];
