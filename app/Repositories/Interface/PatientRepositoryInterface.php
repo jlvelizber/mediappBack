@@ -4,6 +4,7 @@ namespace App\Repositories\Interface;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Models\Patient;
 
 
 interface PatientRepositoryInterface
@@ -21,4 +22,14 @@ interface PatientRepositoryInterface
      * Paginate and query data 
      */
     public function queryPaginatePatientsByDoctorId(int $doctorId, string $query): LengthAwarePaginator;
+
+    /**
+     * Get patient by doctor id and patient id
+     *
+     * @param [type] $doctorId
+     * @param [type] $id
+     * @return Patient|null
+     */
+    public function getPatientByDoctorId($doctorId, $id): Patient|null;
+
 }

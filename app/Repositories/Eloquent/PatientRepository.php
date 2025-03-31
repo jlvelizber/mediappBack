@@ -45,4 +45,17 @@ class PatientRepository extends BaseRepository implements PatientRepositoryInter
             ], 'like', "%{$query}%")
             ->paginate();
     }
+
+
+    /**
+     * Get patient by doctor id and patient id
+     *
+     * @param [type] $doctorId
+     * @param [type] $id
+     * @return Patient|null
+     */
+    public function getPatientByDoctorId($doctorId, $id): Patient|null
+    {
+        return $this->model->where('doctor_id', $doctorId)->where('id', $id)->first();
+    }
 }

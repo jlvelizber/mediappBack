@@ -71,4 +71,20 @@ class PatientService
     {
         return $this->patientRepository->queryPaginatePatientsByDoctorId($doctorId, $query);
     }
+
+    /**
+     * Get patient by doctor id and patient id
+     *
+     * @param [type] $doctorId
+     * @param [type] $id
+     * @return Patient|null
+     */
+    public function getPatientByDoctorId($doctorId, $id): Patient|null
+    {
+        $patient = $this->patientRepository->getPatientByDoctorId($doctorId, $id);
+        if (!$patient)
+            throw new NotFoundHttpException('Patient not found', null, Response::HTTP_NOT_FOUND);
+
+        return $patient;
+    }
 }

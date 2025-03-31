@@ -48,9 +48,10 @@ class PatientController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $patient)
+    public function show(Request $request, int $patient)
     {
-        $patient = $this->patientService->getPatientById($patient);
+        $doctorId = $request->user()->doctor->id;
+        $patient = $this->patientService->getPatientByDoctorId($doctorId, $patient);
         return PatientResource::make($patient)->response();
     }
 
