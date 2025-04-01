@@ -26,7 +26,7 @@ class PatientStoreRequest extends FormRequest
         return [
             'name' => 'required|string|min:3|max:255',
             'lastname' => 'required|string|min:3|max:255',
-            'document' => 'required|string|unique:patients,document|max:10',
+            'document' => 'required|string|max:10',
             'email' => 'required|email|unique:patients,email',
             'phone' => 'required|string|max:10',
             'address' => 'string|max:255',
