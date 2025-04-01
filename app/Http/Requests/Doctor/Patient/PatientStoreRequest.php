@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Doctor\Patient;
 
 use App\Enum\PatientGender;
+use App\Models\Doctor;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -23,11 +24,12 @@ class PatientStoreRequest extends FormRequest
      */
     public function rules(): array
     {
+        $doctorId = $this->user()->doctor->id;
         return [
             'name' => 'required|string|min:3|max:255',
             'lastname' => 'required|string|min:3|max:255',
-            'document' => 'required|string|max:10',
-            'email' => 'required|email|unique:patients,email',
+            'document' => ['required', 'string', 'max:10', Rule::unique('patients')->where('doctor_id', $doctorId)],
+            'email' => ['required', 'email'],
             'phone' => 'required|string|max:10',
             'address' => 'string|max:255',
             'dob' => 'required|date',

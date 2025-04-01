@@ -23,11 +23,13 @@ class PatientUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+        $doctorId = $this->user()->doctor->id;
+        $patientId = $this->route('patient');
         return [
             'name' => 'string|min:3|max:255',
             'lastname' => 'string|min:3|max:255',
-            'document' => 'string|unique:patients,document,' . $this->route('patient') . '|max:10',
-            'email' => 'email|unique:patients,email,' . $this->route('patient'),
+            'document' => ['string', Rule::unique('patients')->where('doctor_id', $doctorId)->ignore($patientId), 'max:10'],
+            'email' => 'email|required',
             'phone' => 'string|max:10',
             'address' => 'string|max:255',
             'dob' => 'date',
