@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Patient;
+namespace App\Http\Requests\Doctor\Patient;
 
 use App\Enum\PatientGender;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class PatientUpdateRequest extends FormRequest
+class PatientStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,17 +24,16 @@ class PatientUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'string|min:3|max:255',
-            'lastname' => 'string|min:3|max:255',
-            'document' => 'string|unique:patients,document,' . $this->route('patient') . '|max:10',
-            'email' => 'email|unique:patients,email,' . $this->route('patient'),
-            'phone' => 'string|max:10',
+            'name' => 'required|string|min:3|max:255',
+            'lastname' => 'required|string|min:3|max:255',
+            'document' => 'required|string|max:10',
+            'email' => 'required|email|unique:patients,email',
+            'phone' => 'required|string|max:10',
             'address' => 'string|max:255',
-            'dob' => 'date',
+            'dob' => 'required|date',
             'gender' => Rule::enum(PatientGender::class)
         ];
     }
-
 
     public function attributes(): array
     {

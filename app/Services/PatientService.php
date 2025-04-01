@@ -50,9 +50,20 @@ class PatientService
         return $this->getPatientById($id);
     }
 
-    public function deletePatient($id)
+    public function deletePatient($id): bool|null
     {
         return $this->patientRepository->delete($id);
+    }
+
+    /**
+     * Get all patients by doctor id
+     *
+     * @param [type] $doctorId
+     * @return Collection
+     */
+    public function getAllPatientsByDoctorId($doctorId): Collection
+    {
+        return $this->patientRepository->getAllPatientsByDoctorId($doctorId);
     }
 
     /**
@@ -86,5 +97,32 @@ class PatientService
             throw new NotFoundHttpException('Patient not found', null, Response::HTTP_NOT_FOUND);
 
         return $patient;
+    }
+
+
+    /**
+     * Update patient by doctor id and patient id
+     * 
+     */
+    public function updatePatientByDoctorId($id, array $data): Patient|null
+    {
+        $doctorId = $data['doctor_id'];
+        $this->getPatientByDoctorId($doctorId, $id);
+
+        $updated = $this->patientRepository->update($id, $data);
+        if (!$updated) {
+            throw ValidationException::withMessages(['message' => 'Patient was not updated']);
+        }
+        return $this->getPatientByDoctorId($doctorId, $id);
+    }
+
+
+    /**
+     * Delete patient by doctor id and patient id
+     */
+    public function deletePatientByDoctorId($doctorId, $id): bool|null
+    {
+        $this->getPatientByDoctorId($doctorId, $id);
+        return $this->patientRepository->delete($id);
     }
 }

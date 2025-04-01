@@ -15,6 +15,7 @@ class PatientRepository extends BaseRepository implements PatientRepositoryInter
     public function __construct(Patient $model)
     {
         parent::__construct($model);
+
     }
 
     /**
@@ -57,5 +58,16 @@ class PatientRepository extends BaseRepository implements PatientRepositoryInter
     public function getPatientByDoctorId($doctorId, $id): Patient|null
     {
         return $this->model->where('doctor_id', $doctorId)->where('id', $id)->first();
+    }
+
+    /**
+     * Get all patients by doctor id
+     *
+     * @param [type] $doctorId
+     * @return Collection
+     */
+    public function getAllPatientsByDoctorId($doctorId): Collection
+    {
+        return $this->model->where('doctor_id', $doctorId)->get();
     }
 }

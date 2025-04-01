@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Doctor;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Patient\PatientStoreRequest;
-use App\Http\Requests\Patient\PatientUpdateRequest;
+use App\Http\Requests\Doctor\Patient\PatientStoreRequest as DoctorPatientStoreRequest;
+use App\Http\Requests\Doctor\Patient\PatientUpdateRequest as DoctorPatientUpdateRequest;
 use App\Http\Resources\PatientPaginateResource;
 use App\Http\Resources\PatientResource;
 use App\Services\PatientService;
@@ -28,7 +28,7 @@ class PatientController extends Controller
     public function index(Request $request): JsonResponse
     {
         $doctorId = $request->user()->doctor->id;
-        $patients = $this->patientService->paginatePatientByDoctorId($doctorId);
+        $patients = $this->patientService->getAllPatientsByDoctorId($doctorId);
         return PatientResource::collection($patients)->response();
     }
 
@@ -36,7 +36,7 @@ class PatientController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PatientStoreRequest $request): JsonResponse
+    public function store(DoctorPatientStoreRequest $request): JsonResponse
     {
         $doctorId = $request->user()->doctor->id;
         $request->merge(['doctor_id' => $doctorId]);
@@ -59,18 +59,21 @@ class PatientController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(PatientUpdateRequest $request, int $patient)
+    public function update(DoctorPatientUpdateRequest $request, int $patient)
     {
-        $patient = $this->patientService->updatePatient($patient, $request->all());
+        $doctorId = $request->user()->doctor->id;
+        $request->merge(['doctor_id' => $doctorId]);
+        $patient = $this->patientService->updatePatientByDoctorId($patient, $request->all());
         return PatientResource::make($patient)->response();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $patient)
+    public function destroy(Request $request, int $patient)
     {
-        $this->patientService->deletePatient($patient);
+        $doctorId = $request->user()->doctor->id;
+        $this->patientService->deletePatientByDoctorId($doctorId, $patient);
         return response()->json(['message' => 'Patient deleted successfully']);
     }
 

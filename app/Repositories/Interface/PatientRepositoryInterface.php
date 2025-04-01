@@ -32,4 +32,12 @@ interface PatientRepositoryInterface
      */
     public function getPatientByDoctorId($doctorId, $id): Patient|null;
 
+    /**
+     * Get all patients by doctor id
+     *
+     * @param [type] $doctorId
+     * @return Collection
+     */
+    public function getAllPatientsByDoctorId($doctorId): Collection;
+
 }
