@@ -9,6 +9,7 @@ use App\Repositories\BaseRepository;
 use App\Repositories\Interface\DoctorConfigurationRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class AppointmentRepository extends BaseRepository implements AppointmentRepositoryInterface
 {
@@ -62,6 +63,32 @@ class AppointmentRepository extends BaseRepository implements AppointmentReposit
             ->whereDate('date_time', $date)
             ->where('status', AppointmentStatusEnum::PENDING)
             ->get();
+    }
+
+    /**
+     * @param array $data
+     * @return LengthAwarePaginator
+     */
+    public function paginateLastAppointmentsByDoctor(int $doctorId): LengthAwarePaginator
+    {
+        return $this->model->where('doctor_id', $doctorId)
+            //->where('status', AppointmentStatusEnum::PENDING)
+            ->orderBy('date_time', 'desc')
+            ->orderBy('status', 'asc')
+            ->with([
+                'patient' => function ($query) {
+                    $query->select('id', 'name', 'lastname');
+                }
+            ])
+            ->select(
+                'id',
+                'status',
+                'patient_id',
+                'created_at',
+            )
+            ->selectRaw('DATE_FORMAT(date_time, "%H:%i") as time')
+            ->selectRaw('DATE_FORMAT(date_time, "%Y-%m-%d") as date')
+            ->paginate(config('mediapp.appointment.paginate'));
     }
 
 

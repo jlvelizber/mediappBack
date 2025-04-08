@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Doctor;
 
 use App\Events\AppointmentCreated;
 use App\Http\Requests\Doctor\Appointment\{DoctorAppointmentStoreRequest, DoctorAppointmentUpdateRequest};
+use App\Http\Resources\AppointmentPaginateResource;
 use App\Http\Resources\AppointmentResource;
 use App\Services\AppointmentService;
 use Illuminate\Http\JsonResponse;
@@ -73,5 +74,15 @@ class AppointmentController extends Controller
     {
         $appointments = $this->appointmentService->getFutureAppointments($doctorId);
         return AppointmentResource::collection($appointments)->response();
+    }
+
+    /**
+     * Get past appointments for a doctor.
+     */
+    public function paginate(Request $request): JsonResponse
+    {
+        $doctorId = $request->user()->doctor->id;
+        $appointments = $this->appointmentService->paginateAppointmentsByDoctor($doctorId);
+        return AppointmentPaginateResource::collection($appointments)->response();
     }
 }

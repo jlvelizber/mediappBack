@@ -60,13 +60,19 @@ Route::middleware(['auth:sanctum'])->group(function () {
         });
 
 
-
+        //Patients
         Route::group([
             'prefix' => 'patients',
         ], function () {
             Route::get('paginate', [DoctorPatientController::class, 'paginate']);
         });
         Route::apiResource('patients', DoctorPatientController::class);
+        //Appointments
+        Route::group([
+            'prefix' => 'appointments',
+        ], function () {
+            Route::get('paginate', [DoctorAppointmentController::class, 'paginate']);
+        });
         Route::apiResource('appointments', DoctorAppointmentController::class);
 
 

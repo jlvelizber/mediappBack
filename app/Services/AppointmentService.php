@@ -6,6 +6,7 @@ use App\Models\Appointment;
 use App\Repositories\Interface\AppointmentRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -61,5 +62,11 @@ class AppointmentService
         $this->getAppointmentById($id);
 
         return $this->appointmentRepository->delete($id);
+    }
+
+
+    public function paginateAppointmentsByDoctor($doctorId): LengthAwarePaginator
+    {
+        return $this->appointmentRepository->paginateLastAppointmentsByDoctor($doctorId);
     }
 }
