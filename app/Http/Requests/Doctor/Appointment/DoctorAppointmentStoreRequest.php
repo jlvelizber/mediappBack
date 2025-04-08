@@ -63,7 +63,7 @@ class DoctorAppointmentStoreRequest extends FormRequest
         $validator->after(function ($validator) {
             $dateTime = $this->input('date_time');
             $doctorId = $this->input('doctor_id');
-            $durationMinutes = $this->doctorConfigurationRepositoryInterface->getByDoctorIdAndKeyValue($doctorId, 'default_appointment_duration')->default_appointment_duration ?? config('mediapp.appointment.default_duration_minutes');
+            $durationMinutes = $this->doctorConfigurationRepositoryInterface->getByDoctorIdAndKeyValue($doctorId, 'default_appointment_duration')->default_appointment_duration ?? config('mediapp.doctor_configuration.default_appointment_duration');
             (int) $durationMinutes--;
             $endTime = Carbon::parse($dateTime)->addMinutes($durationMinutes);
 
