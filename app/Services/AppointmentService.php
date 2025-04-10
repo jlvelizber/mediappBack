@@ -64,9 +64,26 @@ class AppointmentService
         return $this->appointmentRepository->delete($id);
     }
 
-
+    /**
+     * Get all appointments by doctor id
+     * @param mixed $doctorId
+     * @return LengthAwarePaginator
+     */
     public function paginateAppointmentsByDoctor($doctorId): LengthAwarePaginator
     {
         return $this->appointmentRepository->paginateLastAppointmentsByDoctor($doctorId);
+    }
+
+
+
+    /**
+     * Get all appointments by patient id
+     * @param mixed $doctorId
+     * @param string $query
+     * @return LengthAwarePaginator
+     */
+    public function queryPaginateAppointmentByDoctorId($doctorId, string $query): LengthAwarePaginator
+    {
+        return $this->appointmentRepository->queryPaginateAppointmentByDoctorId($doctorId, $query);
     }
 }

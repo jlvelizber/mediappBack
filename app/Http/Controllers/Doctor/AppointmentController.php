@@ -82,7 +82,12 @@ class AppointmentController extends Controller
     public function paginate(Request $request): JsonResponse
     {
         $doctorId = $request->user()->doctor->id;
-        $appointments = $this->appointmentService->paginateAppointmentsByDoctor($doctorId);
+        if ($request->has('query')) {
+            $query = $request->get('query');
+            $appointments = $this->appointmentService->queryPaginateAppointmentByDoctorId($doctorId, $query);
+        } else {
+            $appointments = $this->appointmentService->paginateAppointmentsByDoctor($doctorId);
+        }
         return AppointmentPaginateResource::collection($appointments)->response();
     }
 }

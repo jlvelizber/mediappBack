@@ -85,7 +85,6 @@ class PatientController extends Controller
             $query = $request->get('query');
             $patients = $this->patientService->queryPaginatePatientByDoctorId($doctorId, $query);
         } else {
-
             $patients = $this->patientService->paginatePatientByDoctorId($doctorId);
         }
         return PatientPaginateResource::collection($patients)->response();

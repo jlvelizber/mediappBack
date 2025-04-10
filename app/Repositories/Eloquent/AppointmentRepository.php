@@ -91,5 +91,38 @@ class AppointmentRepository extends BaseRepository implements AppointmentReposit
             ->paginate(config('mediapp.appointment.paginate'));
     }
 
+    /**
+     * @param int $doctorId
+     * @param string $query
+     * @return LengthAwarePaginator
+     */
+    public function queryPaginateAppointmentByDoctorId(int $doctorId, string $query): LengthAwarePaginator
+    {
+        return $this->model->where('doctor_id', $doctorId)
+            ->where(function ($queryBuilder) use ($query) {
+                $queryBuilder->where('id', 'like', "%$query%")
+                    ->orWhereHas('patient', function ($q) use ($query) {
+                        $q->where('name', 'like', "%$query%")
+                            ->orWhere('lastname', 'like', "%$query%");
+                    });
+            })
+            ->orderBy('date_time', 'desc')
+            ->orderBy('status', 'asc')
+            ->with([
+                'patient' => function ($query) {
+                    $query->select('id', 'name', 'lastname');
+                }
+            ])
+            ->select(
+                'id',
+                'status',
+                'patient_id',
+                'created_at',
+            )
+            ->selectRaw('DATE_FORMAT(date_time, "%H:%i") as time')
+            ->selectRaw('DATE_FORMAT(date_time, "%Y-%m-%d") as date')
+            ->paginate(config('mediapp.appointment.paginate'));
+    }
+
 
 }

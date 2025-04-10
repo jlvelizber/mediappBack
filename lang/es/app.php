@@ -14,7 +14,12 @@ return [
         'doctor_not_available' => 'El doctor no está disponible en el día seleccionado.',
         'doctor_has_conflicting_appointment' => 'El doctor tiene una cita en conflicto en este horario.',
         'appointment_confirmed' => 'Cita confirmada',
-        'doctor_is_bussy' => 'Este horario ya está ocupado.'
+        'doctor_is_bussy' => 'Este horario ya está ocupado.',
+        'status' => [
+            'pending' => 'Pendiente',
+            'completed' => 'Completada',
+            'cancelled' => 'Cancelada',
+        ],
     ],
     'notifications' => [
         'appointment_scheduled' => 'Nueva Cita agendada',

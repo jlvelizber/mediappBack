@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enum\AppointmentStatusEnum;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,6 +18,7 @@ class AppointmentPaginateResource extends JsonResource
         return [
             'id' => $this->id,
             'status' => $this->status,
+            'status_label' => AppointmentStatusEnum::translateByValue($this->status),
             'patient' => $this->patient->name . ' ' . $this->patient->lastname,
             'date' => $this->date,
             'time' => $this->time,

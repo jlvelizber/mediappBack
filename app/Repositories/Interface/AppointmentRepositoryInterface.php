@@ -28,4 +28,12 @@ interface AppointmentRepositoryInterface
      * @return LengthAwarePaginator
      */
     public function paginateLastAppointmentsByDoctor(int $doctorId): LengthAwarePaginator;
+
+
+    /**
+     * @param int $doctorId
+     * @param string $query
+     * @return LengthAwarePaginator
+     */
+    public function queryPaginateAppointmentByDoctorId(int $doctorId, string $query): LengthAwarePaginator;
 }
