@@ -14,7 +14,21 @@ return [
         'doctor_not_available' => 'The doctor is not available on the selected day.',
         'doctor_has_conflicting_appointment' => 'The doctor has a conflicting appointment at this time.',
         'appointment_confirmed' => 'Appointment confirmed',
-        'doctor_is_bussy' => 'This time is already taken.'
+        'doctor_is_bussy' => 'This time is already taken.',
+        'status' => [
+            'pending' => 'Pending',
+            'completed' => 'Completed',
+            'cancelled' => 'Cancelled',
+        ],
+        'patient_id' => 'Patient',
+        'doctor_id' => 'Doctor',
+        'date_time' => 'Date and time',
+        'status_field' => 'Status',
+        'reason' => 'Reason',
+        'appointment' => 'Appointment',
+        'doctor_configuration' => 'Doctor configuration',
+        'default_appointment_duration' => 'Default appointment duration',
+        'default_appointment_duration_help' => 'Default appointment duration in minutes',
     ],
     'notifications' => [
         'appointment_scheduled' => 'New Appointment scheduled',

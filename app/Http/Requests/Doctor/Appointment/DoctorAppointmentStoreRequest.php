@@ -79,4 +79,16 @@ class DoctorAppointmentStoreRequest extends FormRequest
             }
         });
     }
+
+
+    public function attributes(): array
+    {
+        return [
+            'patient_id' => __('app.appointments.patient_id'),
+            'date_time' => __('app.appointments.date_time'),
+            'status' => __('app.appointments.status_field'),
+            'doctor_id' => __('app.appointments.doctor_id'),
+            'reason' => __('app.appointments.reason'),
+        ];
+    }
 }
