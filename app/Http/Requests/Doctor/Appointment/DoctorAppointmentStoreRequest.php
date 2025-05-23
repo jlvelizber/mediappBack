@@ -44,7 +44,7 @@ class DoctorAppointmentStoreRequest extends FormRequest
             'patient_id' => 'required|exists:patients,id',
             'date_time' => [
                 'required',
-                'date_format:Y-m-d H:i:s',
+                'date_format:Y-m-d H:i',
                 new DoctorAvailableRule($this->doctor_id, $this->date_time),
                 new DoctorHasNoConflictRule($this->doctor_id, $this->date_time),
             ],
