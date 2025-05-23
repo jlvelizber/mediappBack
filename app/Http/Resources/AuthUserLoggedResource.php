@@ -21,11 +21,11 @@ class AuthUserLoggedResource extends JsonResource
                 'email' => $this->email,
                 'created_at' => $this->created_at,
                 'updated_at' => $this->updated_at,
-                'role' => $this->role,
+                'role' => $this->role
             ],
             'token' => $this->token,
             $this->mergeWhen($this->doctor, [
-                'doctor' => new DoctorResource($this->doctor),
+                'doctor' => new DoctorResource($this->doctor)
             ]),
 
 

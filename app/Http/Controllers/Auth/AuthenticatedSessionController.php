@@ -30,7 +30,6 @@ class AuthenticatedSessionController extends Controller
         $token = $user->createToken('auth-token')->plainTextToken;
         $user->token = $token;
         return AuthUserLoggedResource::make($user)->response()->cookie('role', $user->role, 60 * 24, '/', 'localhost', false, false);
-        ;
 
 
     }
