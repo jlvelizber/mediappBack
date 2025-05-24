@@ -14,6 +14,7 @@ use App\Repositories\Interface\DoctorConfigurationRepositoryInterface;
 use App\Repositories\Interface\DoctorRepositoryInterface;
 use App\Repositories\Interface\MedicalRecordRepositoryInterface;
 use App\Repositories\Interface\PatientRepositoryInterface;
+use Carbon\Carbon;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Eloquent\UserRepository;
@@ -40,6 +41,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Carbon::setLocale(config('app.locale'));
         ResetPassword::createUrlUsing(function (object $notifiable, string $token) {
             return config('app.frontend_url') . "/password-reset/$token?email={$notifiable->getEmailForPasswordReset()}";
         });

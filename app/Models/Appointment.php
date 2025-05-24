@@ -26,4 +26,21 @@ class Appointment extends Model
     {
         return $this->belongsTo(Patient::class);
     }
+
+    /**
+     * Scopes
+     */
+
+    /**
+     * Scope order by nearby hour
+     */
+    public function scopeOrderByNearby($query)
+    {
+        return
+            $query->orderByRaw('ABS(TIMESTAMPDIFF(MINUTE, date_time, NOW())) asc')
+                ->orderByRaw('DATE_FORMAT(date_time, "%Y-%m-%d") asc')
+                ->orderByRaw('DATE_FORMAT(date_time, "%H:%i") asc');
+    }
+
+
 }

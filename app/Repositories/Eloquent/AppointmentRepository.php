@@ -73,7 +73,7 @@ class AppointmentRepository extends BaseRepository implements AppointmentReposit
     {
         return $this->model->where('doctor_id', $doctorId)
             //->where('status', AppointmentStatusEnum::PENDING)
-            ->orderBy('date_time', 'desc')
+            ->orderByNearby()
             ->orderBy('status', 'asc')
             ->with([
                 'patient' => function ($query) {
@@ -106,7 +106,7 @@ class AppointmentRepository extends BaseRepository implements AppointmentReposit
                             ->orWhere('lastname', 'like', "%$query%");
                     });
             })
-            ->orderBy('date_time', 'desc')
+            ->orderByNearby()
             ->orderBy('status', 'asc')
             ->with([
                 'patient' => function ($query) {
