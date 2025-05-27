@@ -49,7 +49,6 @@ class AppointmentService
     public function updateAppointment($id, array $data): Appointment|null
     {
         $this->getAppointmentById($id);
-
         $wasUpdated = $this->appointmentRepository->update($id, $data);
         if (!$wasUpdated) {
             throw ValidationException::withMessages(['appointment' => 'Appointment was not updated']);

@@ -54,7 +54,9 @@ class AppointmentController extends Controller
      */
     public function update(DoctorAppointmentUpdateRequest $request, int $id)
     {
-        $appointment = $this->appointmentService->updateAppointment($id, $request->validated());
+        $doctorId = $request->user()->doctor->id;
+        $request->merge(['doctor_id' => $doctorId]);
+        $appointment = $this->appointmentService->updateAppointment($id, $request->all());
         return AppointmentResource::make($appointment)->response();
     }
 
