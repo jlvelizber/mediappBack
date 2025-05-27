@@ -28,6 +28,15 @@ class Appointment extends Model
     }
 
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'date_time' => 'datetime:Y-m-d H:i'
+    ];
+
+    /**
      * Scopes
      */
 
