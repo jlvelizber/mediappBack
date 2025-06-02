@@ -19,6 +19,7 @@ return [
             'pending' => 'Pending',
             'completed' => 'Completed',
             'cancelled' => 'Cancelled',
+            'confirmed' => 'Confirmed',
         ],
         'patient_id' => 'Patient',
         'doctor_id' => 'Doctor',

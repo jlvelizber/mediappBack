@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enum\AppointmentStatusEnum;
 use App\Models\Appointment;
 use App\Repositories\Interface\AppointmentRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
@@ -84,5 +85,22 @@ class AppointmentService
     public function queryPaginateAppointmentByDoctorId($doctorId, string $query): LengthAwarePaginator
     {
         return $this->appointmentRepository->queryPaginateAppointmentByDoctorId($doctorId, $query);
+    }
+
+    /**
+     * Update the status of an appointment
+     * @param int $appointmentId
+     * @param string $status
+     */
+    public function updateAppointmentStatus(int $appointmentId, string $status): Appointment
+    {
+        $appointment = $this->getAppointmentById($appointmentId);
+
+        $appointment->status = $status;
+        if (!$appointment->save()) {
+            throw ValidationException::withMessages(['appointment' => 'Appointment status was not updated']);
+        }
+
+        return $appointment;
     }
 }

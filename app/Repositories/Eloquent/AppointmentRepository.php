@@ -72,9 +72,7 @@ class AppointmentRepository extends BaseRepository implements AppointmentReposit
     public function paginateLastAppointmentsByDoctor(int $doctorId): LengthAwarePaginator
     {
         return $this->model->where('doctor_id', $doctorId)
-            //->where('status', AppointmentStatusEnum::PENDING)
             ->orderByNearby()
-            ->orderBy('status', 'asc')
             ->with([
                 'patient' => function ($query) {
                     $query->select('id', 'name', 'lastname');
@@ -88,6 +86,11 @@ class AppointmentRepository extends BaseRepository implements AppointmentReposit
             )
             ->selectRaw('DATE_FORMAT(date_time, "%H:%i") as time')
             ->selectRaw('DATE_FORMAT(date_time, "%Y-%m-%d") as date')
+            // ->where('status', '<>', AppointmentStatusEnum::CANCELLED)
+            ->orderByRaw('ABS(TIMESTAMPDIFF(SECOND, date_time, NOW()))')
+            ->orderByRaw("FIELD(status, '" . AppointmentStatusEnum::CONFIRMED->value . "', '" . AppointmentStatusEnum::PENDING->value . "', '" . AppointmentStatusEnum::CANCELLED->value . "') DESC")
+            // ->orderBy('time', 'asc') // near by time
+            // ->orderBy('status', 'desc')
             ->paginate(config('mediapp.appointment.paginate'));
     }
 

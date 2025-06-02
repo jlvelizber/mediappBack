@@ -73,8 +73,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         ], function () {
             Route::get('paginate', [DoctorAppointmentController::class, 'paginate']);
         });
+        Route::put('appointments/{appointment}/status', [DoctorAppointmentController::class, 'updateStatus']);
         Route::apiResource('appointments', DoctorAppointmentController::class);
-
 
     });
 });

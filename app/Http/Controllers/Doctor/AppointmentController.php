@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Doctor;
 
 use App\Events\AppointmentCreated;
+use App\Http\Requests\Common\AppointmentChangeStatusRequest;
 use App\Http\Requests\Doctor\Appointment\{DoctorAppointmentStoreRequest, DoctorAppointmentUpdateRequest};
 use App\Http\Resources\AppointmentPaginateResource;
 use App\Http\Resources\AppointmentResource;
@@ -91,5 +92,16 @@ class AppointmentController extends Controller
             $appointments = $this->appointmentService->paginateAppointmentsByDoctor($doctorId);
         }
         return AppointmentPaginateResource::collection($appointments)->response();
+    }
+
+    /**
+     * Update the status of an appointment.
+     */
+    public function updateStatus(AppointmentChangeStatusRequest $request, int $appointment): JsonResponse
+    {
+        $status = $request->input('status');
+        $appointment = $this->appointmentService->updateAppointmentStatus($appointment, $status);
+
+        return AppointmentPaginateResource::make($appointment)->response();
     }
 }
