@@ -36,4 +36,13 @@ interface AppointmentRepositoryInterface
      * @return LengthAwarePaginator
      */
     public function queryPaginateAppointmentByDoctorId(int $doctorId, string $query): LengthAwarePaginator;
+
+
+    /**
+     *
+     * @void
+     */
+    public function getPreviousAppointmentsNotConfirmed(): Collection;
+
+
 }

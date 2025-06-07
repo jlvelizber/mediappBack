@@ -34,4 +34,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withEvents(discover: [
         __DIR__ . '/../app/Listeners',
     ])
+    ->withCommands([
+        __DIR__ . '/../app/Console/Commands',
+    ])
     ->create();

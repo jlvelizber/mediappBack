@@ -10,6 +10,7 @@ use App\Repositories\Interface\DoctorConfigurationRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Log;
 
 class AppointmentRepository extends BaseRepository implements AppointmentRepositoryInterface
 {
@@ -125,6 +126,22 @@ class AppointmentRepository extends BaseRepository implements AppointmentReposit
             ->selectRaw('DATE_FORMAT(date_time, "%H:%i") as time')
             ->selectRaw('DATE_FORMAT(date_time, "%Y-%m-%d") as date')
             ->paginate(config('mediapp.appointment.paginate'));
+    }
+
+
+    /**
+     * Change the status of previous appointments that are not confirmed to cancelled
+     *
+     * @return Collection
+     */
+    public function getPreviousAppointmentsNotConfirmed(): Collection
+    {
+        $dateToday = now()->startOfDay()->format('Y-m-d 00:00:00');
+        Log::info('Cancelling previous appointments not confirmed before: ' . $dateToday);
+        return $this->model->where('status', AppointmentStatusEnum::PENDING)
+            ->where('date_time', '<', $dateToday)
+            ->get();
+
     }
 
 
