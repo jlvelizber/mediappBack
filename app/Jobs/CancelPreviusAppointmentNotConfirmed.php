@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Enum\AppointmentStatusEnum;
 use App\Repositories\Interface\AppointmentRepositoryInterface;
+use Illuminate\Container\Attributes\Log;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
@@ -16,10 +17,7 @@ class CancelPreviusAppointmentNotConfirmed implements ShouldQueue
      */
     protected $appointmentRepository;
 
-    /**
-     * Create a new job instance.
-     */
-    public function __construct(AppointmentRepositoryInterface $appointmentRepository)
+    public function setDependency(AppointmentRepositoryInterface $appointmentRepository): void
     {
         $this->appointmentRepository = $appointmentRepository;
     }
@@ -37,6 +35,7 @@ class CancelPreviusAppointmentNotConfirmed implements ShouldQueue
             return;
         }
         foreach ($appointments as $appointment) {
+            \Log::info('Cancelling appointment ID: ' . $appointment->id);
             $appointment->status = AppointmentStatusEnum::CANCELLED; // Assuming 'cancelled' is the status you want to set
             $appointment->save();
         }

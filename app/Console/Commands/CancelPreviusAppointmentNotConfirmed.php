@@ -12,7 +12,7 @@ class CancelPreviusAppointmentNotConfirmed extends Command
      *
      * @var string
      */
-    protected $signature = 'app:cancel-previus-appointment-not-confirmed';
+    protected $signature = 'appointments:cancel-not-confirmed';
 
     /**
      * The console command description.
@@ -32,7 +32,10 @@ class CancelPreviusAppointmentNotConfirmed extends Command
 
         // call the job to handle the cancellation
         $service = app(AppointmentRepositoryInterface::class);
-        \App\Jobs\CancelPreviusAppointmentNotConfirmed::dispatch($service);
+        $job = new \App\Jobs\CancelPreviusAppointmentNotConfirmed();
+        $job->setDependency($service);
+        dispatch($job);
+
 
         $this->info('Previous appointments that were not confirmed have been cancelled.');
     }
