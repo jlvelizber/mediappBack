@@ -23,6 +23,8 @@ class AppointmentPaginateResource extends JsonResource
             'patient' => $this->patient->name . ' ' . $this->patient->lastname,
             'date' => Carbon::createFromFormat('Y-m-d', $this->date)->format('D, d M Y'), // format Mon, 01 Jan 2023, // format Mon, 01 Jan 2023 
             'time' => $this->time,
+            'duration_minutes' => $this->duration_minutes,
+            'date_time' => $this->date_time,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];
     }

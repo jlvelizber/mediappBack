@@ -83,6 +83,8 @@ class AppointmentRepository extends BaseRepository implements AppointmentReposit
                 'status',
                 'patient_id',
                 'created_at',
+                'duration_minutes',
+                'date_time'
             )
             ->selectRaw('DATE_FORMAT(date_time, "%H:%i") as time')
             ->selectRaw('DATE_FORMAT(date_time, "%Y-%m-%d") as date')
