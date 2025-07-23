@@ -103,4 +103,16 @@ class AppointmentService
 
         return $appointment;
     }
+
+    /**
+     * Get appointments by date range
+     * @param string| int $doctorId
+     * @param string $startDate
+     * @param string $endDate
+     * @return Collection
+     */
+    public function getAppointmentsByDateRange(string|int $doctorId, string $startDate, string $endDate): Collection
+    {
+        return $this->appointmentRepository->queryAppointmentByRangeDate($doctorId, $startDate, $endDate);
+    }
 }

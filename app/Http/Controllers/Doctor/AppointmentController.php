@@ -24,8 +24,18 @@ class AppointmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
+        //  vamos a filtrar por fecha si se envían los parámetros start_date y end_date
+        if ($request->has('start_date') && $request->has('end_date')) {
+            $doctorId = $request->user()->doctor->id;
+            $startDate = $request->get('start_date');
+            $endDate = $request->get('end_date');
+            $appointments = $this->appointmentService->getAppointmentsByDateRange($doctorId, $startDate, $endDate);
+            return AppointmentPaginateResource::collection($appointments)->response();
+        }
+
+
         $appointments = $this->appointmentService->getAllAppointments();
         return AppointmentResource::collection($appointments)->response();
     }

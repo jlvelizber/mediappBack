@@ -142,5 +142,39 @@ class AppointmentRepository extends BaseRepository implements AppointmentReposit
 
     }
 
+    /**
+     * Get appointments by date range
+     * @param string|int $doctorId
+     * @param string $startDate
+     * @param string $endDate
+     * @return Collection
+     */
+    public function queryAppointmentByRangeDate(string|int $doctorId, string $startDate, string $endDate): Collection
+    {
+        return $this->model->whereBetween('date_time', [$startDate, $endDate])
+            ->with([
+                'patient' => function ($query) {
+                    $query->select('id', 'name', 'lastname');
+                }
+            ])
+            ->select(
+                'id',
+                'status',
+                'patient_id',
+                'created_at',
+                'duration_minutes',
+                'date_time'
+            )
+            ->where('doctor_id', $doctorId)
+            ->whereBetween('date_time', [
+                $startDate . ' 00:00:00',
+                $endDate . ' 23:59:59'
+            ])
+            ->selectRaw('DATE_FORMAT(date_time, "%H:%i") as time')
+            ->selectRaw('DATE_FORMAT(date_time, "%Y-%m-%d") as date')
+            ->orderBy('date_time', 'asc')
+            ->get();
+    }
+
 
 }

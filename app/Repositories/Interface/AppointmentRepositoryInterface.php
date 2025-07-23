@@ -45,4 +45,13 @@ interface AppointmentRepositoryInterface
     public function getPreviousAppointmentsNotConfirmed(): Collection;
 
 
+    /**
+     * @param $startDate
+     * @param $endDate
+     * @return Collection
+     */
+    public function queryAppointmentByRangeDate(string|int $doctorId, string $startDate, string $endtDate): Collection;
+
+
+
 }
