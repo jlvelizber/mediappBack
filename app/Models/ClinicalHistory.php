@@ -8,8 +8,6 @@ class ClinicalHistory extends Model
 {
     protected $fillable = [
         'appointment_id',
-        'appointments',
-        'cascade',
         'symptoms',
         'diagnosis',
         'treatment',
