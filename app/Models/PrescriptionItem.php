@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PrescriptionItem extends Model
 {
@@ -15,7 +16,7 @@ class PrescriptionItem extends Model
         'notes',
     ];
 
-    public function prescription()
+    public function prescription(): BelongsTo
     {
         return $this->belongsTo(Prescription::class);
     }

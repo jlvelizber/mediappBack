@@ -27,6 +27,11 @@ class Appointment extends Model
         return $this->belongsTo(Patient::class);
     }
 
+    public function clinicalHistory()
+    {
+        return $this->hasOne(ClinicalHistory::class);
+    }
+
     /**
      * The attributes that should be cast to native types.
      *

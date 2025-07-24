@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\{
     DoctorAvailabilityController as AdminDoctorAvailabilityController
 };
+use App\Http\Controllers\ClinicalHistoryController;
 use App\Http\Controllers\Doctor\{
     DoctorAvailabilityController as DoctorDoctorAvailabilityController,
     AppointmentController as DoctorAppointmentController,
@@ -75,6 +76,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
         });
         Route::put('appointments/{appointment}/status', [DoctorAppointmentController::class, 'updateStatus']);
         Route::apiResource('appointments', DoctorAppointmentController::class);
+
+        // Clinical Histories
+
+        Route::apiResource('clinical-histories', ClinicalHistoryController::class, [
+            'only' => ['index', 'store', 'show', 'update', 'destroy']
+        ]);
 
     });
 });
