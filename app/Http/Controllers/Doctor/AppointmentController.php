@@ -8,6 +8,7 @@ use App\Http\Requests\Doctor\Appointment\{DoctorAppointmentStoreRequest, DoctorA
 use App\Http\Resources\AppointmentPaginateResource;
 use App\Http\Resources\AppointmentResource;
 use App\Services\AppointmentService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -110,8 +111,19 @@ class AppointmentController extends Controller
     public function updateStatus(AppointmentChangeStatusRequest $request, int $appointment): JsonResponse
     {
         $status = $request->input('status');
-        $appointment = $this->appointmentService->updateAppointmentStatus($appointment, $status);
+        $wasOk = false;
+        try {
+            $appointment = $this->appointmentService->updateAppointmentStatus($appointment, $status);
+            if ($appointment) {
+                $wasOk = true;
+            }
 
-        return AppointmentPaginateResource::make($appointment)->response();
+        } catch (Exception $th) {
+            $wasOk = false;
+        } finally {
+            return response()->json([
+                'was_success' => $wasOk
+            ]);
+        }
     }
 }
