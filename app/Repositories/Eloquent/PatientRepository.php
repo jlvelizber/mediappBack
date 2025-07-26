@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\Patient;
 use App\Repositories\BaseRepository;
+use App\Repositories\Interface\AppointmentRepositoryInterface;
 use App\Repositories\Interface\PatientRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -12,11 +13,13 @@ use DB;
 
 class PatientRepository extends BaseRepository implements PatientRepositoryInterface
 {
-    public function __construct(Patient $model)
+    protected AppointmentRepositoryInterface $appointmentRepositoryInterface;
+    public function __construct(Patient $model, AppointmentRepositoryInterface $appointmentRepositoryInterface)
     {
         parent::__construct($model);
-
+        $this->appointmentRepositoryInterface = $appointmentRepositoryInterface;
     }
+
 
     /**
      * Get patients by doctor id
@@ -69,5 +72,20 @@ class PatientRepository extends BaseRepository implements PatientRepositoryInter
     public function getAllPatientsByDoctorId($doctorId): Collection
     {
         return $this->model->where('doctor_id', $doctorId)->get();
+    }
+
+    /**
+     * Get patient by appointment id
+     *
+     * @param int $doctorId
+     * @param int $patientId
+     * @return Patient
+     */
+    public function getPatientByAppointment($doctorId, $appointmentId): Patient
+    {
+        return $this->appointmentRepositoryInterface->find($appointmentId)
+            ->patient()
+            ->where('doctor_id', $doctorId)
+            ->firstOrFail();
     }
 }

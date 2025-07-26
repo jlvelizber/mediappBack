@@ -125,4 +125,16 @@ class PatientService
         $this->getPatientByDoctorId($doctorId, $id);
         return $this->patientRepository->delete($id);
     }
+
+    /**
+     * Get patient by appointment
+     */
+    public function getPatientByAppointment($doctorId, $patientId): Patient|null
+    {
+        $patient = $this->patientRepository->getPatientByAppointment($doctorId, $patientId);
+        if (!$patient)
+            throw new NotFoundHttpException('Patient not found', null, Response::HTTP_NOT_FOUND);
+
+        return $patient;
+    }
 }

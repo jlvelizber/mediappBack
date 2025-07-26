@@ -89,4 +89,15 @@ class PatientController extends Controller
         }
         return PatientPaginateResource::collection($patients)->response();
     }
+
+
+    /**
+     * Get patient by appointment.
+     */
+    public function getPatientByAppointment(Request $request, int $appointmentId): JsonResponse
+    {
+        $doctorId = $request->user()->doctor->id;
+        $patient = $this->patientService->getPatientByAppointment($doctorId, $appointmentId);
+        return PatientResource::make($patient)->response();
+    }
 }

@@ -40,4 +40,14 @@ interface PatientRepositoryInterface
      */
     public function getAllPatientsByDoctorId($doctorId): Collection;
 
+
+    /**
+     * Get patient by appointment id
+     *
+     * @param int $doctorId
+     * @param int $appointmentId
+     * @return Patient
+     */
+    public function getPatientByAppointment($doctorId, $appointmentId): Patient;
+
 }
