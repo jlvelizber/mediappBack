@@ -48,10 +48,10 @@ class PatientController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, int $patient)
+    public function show(Request $request, string $patient)
     {
         $doctorId = $request->user()->doctor->id;
-        $patient = $this->patientService->getPatientByDoctorId($doctorId, $patient);
+        $patient = $this->patientService->getPatientByDoctorId($doctorId, (int) $patient);
         return PatientResource::make($patient)->response();
     }
 
@@ -94,10 +94,10 @@ class PatientController extends Controller
     /**
      * Get patient by appointment.
      */
-    public function getPatientByAppointment(Request $request, int $appointmentId): JsonResponse
+    public function getPatientByAppointment(Request $request, string $appointmentId): JsonResponse
     {
         $doctorId = $request->user()->doctor->id;
-        $patient = $this->patientService->getPatientByAppointment($doctorId, $appointmentId);
+        $patient = $this->patientService->getPatientByAppointment($doctorId, (int) $appointmentId);
         return PatientResource::make($patient)->response();
     }
 }
