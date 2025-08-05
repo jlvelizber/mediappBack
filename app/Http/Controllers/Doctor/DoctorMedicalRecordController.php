@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Doctor;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Doctor\ClinicalHistory\UpdateMedicalRecordlHistoryRequest;
+use App\Http\Requests\Doctor\MedicalRecord\UpdateMedicalRecordlHistoryRequest;
 use App\Http\Requests\Doctor\MedicalRecord\StoreMedicalRecordRequest;
 use App\Http\Resources\MedicalRecordResource;
 use App\Services\MedicalRecordService;

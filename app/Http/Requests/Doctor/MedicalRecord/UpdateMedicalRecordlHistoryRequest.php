@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Doctor\ClinicalHistory;
+namespace App\Http\Requests\Doctor\MedicalRecord;
 
 use Illuminate\Foundation\Http\FormRequest;
 
