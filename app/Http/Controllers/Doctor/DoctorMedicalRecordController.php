@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Doctor;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Doctor\ClinicalHistory\StoreClinicalHistoryRequest;
-use App\Http\Requests\Doctor\ClinicalHistory\UpdateClinicalHistoryRequest;
+use App\Http\Requests\Doctor\ClinicalHistory\UpdateMedicalRecordlHistoryRequest;
+use App\Http\Requests\Doctor\MedicalRecord\StoreMedicalRecordRequest;
 use App\Http\Resources\MedicalRecordResource;
 use App\Services\MedicalRecordService;
 use Illuminate\Http\JsonResponse;
@@ -31,7 +31,7 @@ class DoctorMedicalRecordController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreClinicalHistoryRequest $request)
+    public function store(StoreMedicalRecordRequest $request)
     {
         $clinicalHistory = $this->medicalRecordService->createClinicalHistory($request->all());
         return MedicalRecordResource::make($clinicalHistory)->response();
@@ -49,7 +49,7 @@ class DoctorMedicalRecordController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateClinicalHistoryRequest $request, string $id)
+    public function update(UpdateMedicalRecordlHistoryRequest $request, string $id)
     {
         $clinicalHistory = $this->medicalRecordService->updateClinicalHistory((int) $id, $request->all());
         return MedicalRecordResource::make($clinicalHistory)->response();
