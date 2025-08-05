@@ -27,9 +27,14 @@ class Appointment extends Model
         return $this->belongsTo(Patient::class);
     }
 
-    public function clinicalHistory()
+    public function medicalRecord()
     {
-        return $this->hasOne(ClinicalHistory::class);
+        return $this->hasOne(MedicalRecord::class);
+    }
+
+    public function prescription()
+    {
+        return $this->hasOne(Prescription::class);
     }
 
     /**
