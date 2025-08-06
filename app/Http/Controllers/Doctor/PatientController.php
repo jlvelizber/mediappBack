@@ -96,8 +96,14 @@ class PatientController extends Controller
      */
     public function getPatientByAppointment(Request $request, string $appointmentId): JsonResponse
     {
-        $doctorId = $request->user()->doctor->id;
-        $patient = $this->patientService->getPatientByAppointment($doctorId, (int) $appointmentId);
-        return PatientResource::make($patient)->response();
+        try {
+            $doctorId = $request->user()->doctor->id;
+            $patient = $this->patientService->getPatientByAppointment($doctorId, (int) $appointmentId);
+            return PatientResource::make($patient)->response();
+            //code...
+        } catch (\Throwable $th) {
+            // Handle the exception as needed, e.g., log it or return an error response
+            return response()->json(['error' => $th->getMessage()], 404);
+        }
     }
 }

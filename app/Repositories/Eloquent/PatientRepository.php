@@ -81,11 +81,14 @@ class PatientRepository extends BaseRepository implements PatientRepositoryInter
      * @param int $patientId
      * @return Patient
      */
-    public function getPatientByAppointment($doctorId, $appointmentId): Patient
+    public function getPatientByAppointment($doctorId, $appointmentId): Patient|null
     {
-        return $this->appointmentRepositoryInterface->find($appointmentId)
-            ->patient()
-            ->where('doctor_id', $doctorId)
-            ->firstOrFail();
+        $appointment = $this->appointmentRepositoryInterface->find($appointmentId);
+        if ($appointment) {
+            return $appointment->patient()
+                ->where('doctor_id', $doctorId)
+                ->firstOrFail();
+        }
+        return null;
     }
 }

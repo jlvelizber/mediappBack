@@ -61,6 +61,20 @@ return [
         'address' => 'Dirección',
         'dob' => 'Fecha de nacimiento',
         'gender' => 'Género'
-    ]
+    ],
+    'medical_records' => [
+        'appointment_id' => 'ID de cita',
+        'symptoms' => 'Síntomas',
+        'diagnosis' => 'Diagnóstico',
+        'treatment' => 'Tratamiento',
+        'notes' => 'Notas',
+        'prescription' => 'Prescripción',
+        'medication_name' => 'Nombre del medicamento',
+        'dosage' => 'Dosis',
+        'frequency' => 'Frecuencia',
+        'duration' => 'Duración',
+        'medical_record_created' => 'Registro médico creado exitosamente.',
+        'medical_record_updated' => 'Registro médico actualizado exitosamente.',
+    ],
 
 ];

@@ -48,6 +48,6 @@ interface PatientRepositoryInterface
      * @param int $appointmentId
      * @return Patient
      */
-    public function getPatientByAppointment($doctorId, $appointmentId): Patient;
+    public function getPatientByAppointment($doctorId, $appointmentId): Patient|null;
 
 }
