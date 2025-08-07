@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Prescription extends Model
 {
+    protected $with = ['items'];
+
     protected $fillable = [
         'appointment_id',
         'notes',

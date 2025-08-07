@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Doctor;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Doctor\MedicalRecord\UpdateMedicalRecordlHistoryRequest;
 use App\Http\Requests\Doctor\MedicalRecord\StoreMedicalRecordRequest;
+use App\Http\Resources\AppointmentMedicalRecordStoredResource;
 use App\Http\Resources\MedicalRecordResource;
 use App\Services\MedicalRecordService;
 use Illuminate\Http\JsonResponse;
@@ -33,8 +34,8 @@ class DoctorMedicalRecordController extends Controller
      */
     public function store(StoreMedicalRecordRequest $request)
     {
-        $clinicalHistory = $this->medicalRecordService->createMedicalRecord($request->all());
-        return MedicalRecordResource::make($clinicalHistory)->response();
+        $medicalRecord = $this->medicalRecordService->createMedicalRecord($request->all());
+        return AppointmentMedicalRecordStoredResource::make($medicalRecord)->response();
     }
 
     /**
