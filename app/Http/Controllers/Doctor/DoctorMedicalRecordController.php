@@ -33,7 +33,7 @@ class DoctorMedicalRecordController extends Controller
      */
     public function store(StoreMedicalRecordRequest $request)
     {
-        $clinicalHistory = $this->medicalRecordService->createClinicalHistory($request->all());
+        $clinicalHistory = $this->medicalRecordService->createMedicalRecord($request->all());
         return MedicalRecordResource::make($clinicalHistory)->response();
     }
 

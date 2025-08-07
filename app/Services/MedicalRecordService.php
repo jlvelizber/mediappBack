@@ -3,6 +3,8 @@ namespace App\Services;
 
 use App\Models\MedicalRecord;
 use App\Repositories\Interface\MedicalRecordRepositoryInterface;
+use App\Repositories\Interface\PrescriptionRepositoryInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -10,10 +12,12 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class MedicalRecordService
 {
     protected MedicalRecordRepositoryInterface $medicalRecordRepositoryInterface;
+    protected PrescriptionRepositoryInterface $prescriptionRepositoryInterface;
 
-    public function __construct(MedicalRecordRepositoryInterface $medicalRecordRepositoryInterface)
+    public function __construct(MedicalRecordRepositoryInterface $medicalRecordRepositoryInterface, PrescriptionRepositoryInterface $prescriptionRepositoryInterface)
     {
         $this->medicalRecordRepositoryInterface = $medicalRecordRepositoryInterface;
+        $this->prescriptionRepositoryInterface = $prescriptionRepositoryInterface;
     }
 
     /**
@@ -41,9 +45,19 @@ class MedicalRecordService
      * Create a new clinical history entry
      * @param array $data
      */
-    public function createClinicalHistory(array $data)
+    public function createMedicalRecord(array $data): MedicalRecord
     {
-        return $this->medicalRecordRepositoryInterface->create($data);
+        $medicalRecord = $this->medicalRecordRepositoryInterface->create($data);
+        if (!$medicalRecord) {
+            throw new ModelNotFoundException(
+                "Clinical history could not be created",
+                Response::HTTP_UNPROCESSABLE_ENTITY
+            );
+        }
+
+        // Prescription creation can be handled here if needed
+        $this->prescriptionRepositoryInterface->create($data['prescription']);
+        return $medicalRecord;
     }
 
 
