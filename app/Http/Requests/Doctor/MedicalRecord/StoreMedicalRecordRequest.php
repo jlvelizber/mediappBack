@@ -4,6 +4,8 @@ namespace App\Http\Requests\Doctor\MedicalRecord;
 
 use App\Enum\UserRoleEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StoreMedicalRecordRequest extends FormRequest
 {
@@ -24,9 +26,9 @@ class StoreMedicalRecordRequest extends FormRequest
     {
         return [
             'appointment_id' => ['required', 'exists:appointments,id'],
-            'symptoms' => ['nullable', 'string'],
-            'diagnosis' => ['nullable', 'string'],
-            'treatment' => ['nullable', 'string'],
+            'symptoms' => ['required', 'string'],
+            'diagnosis' => ['required', 'string'],
+            'treatment' => ['required', 'string'],
             'notes' => ['nullable', 'string'],
             'prescription.items' => ['array'],
             'prescription.items.*.medication_name' => ['required', 'string'],
@@ -57,5 +59,21 @@ class StoreMedicalRecordRequest extends FormRequest
             'prescription.items.*.duration' => __('app.medical_records.duration'),
             'prescription.items.*.notes' => __('app.medical_records.notes'),
         ];
+    }
+
+
+    protected function failedValidation(Validator $validator): void
+    {
+        $formattedErrors = [];
+        foreach ($validator->errors()->toArray() as $key => $messages) {
+            data_set($formattedErrors, $key, $messages);
+        }
+
+        throw new HttpResponseException(
+            response()->json([
+                'message' => $validator->errors()->first(),
+                'errors' => $formattedErrors,
+            ], 422)
+        );
     }
 }
