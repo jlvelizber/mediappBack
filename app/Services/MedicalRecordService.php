@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Events\MedicalRecordCreatedEvent;
 use App\Models\MedicalRecord;
 use App\Repositories\Interface\MedicalRecordRepositoryInterface;
 use App\Repositories\Interface\PrescriptionRepositoryInterface;
@@ -56,7 +57,17 @@ class MedicalRecordService
         }
 
         // Prescription creation can be handled here if needed
-        $this->prescriptionRepositoryInterface->create($data['prescription']);
+        $prescription = $this->prescriptionRepositoryInterface->create($data['prescription']);
+        if (!$prescription) {
+            throw new ModelNotFoundException(
+                "Prescription could not be created",
+                Response::HTTP_UNPROCESSABLE_ENTITY
+            );
+        }
+
+        // Dispatch the event after creating the medical record
+        event(new MedicalRecordCreatedEvent($medicalRecord));
+
         return $medicalRecord;
     }
 

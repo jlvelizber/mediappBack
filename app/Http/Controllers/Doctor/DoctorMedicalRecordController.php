@@ -8,6 +8,7 @@ use App\Http\Requests\Doctor\MedicalRecord\StoreMedicalRecordRequest;
 use App\Http\Resources\AppointmentMedicalRecordStoredResource;
 use App\Http\Resources\MedicalRecordResource;
 use App\Services\MedicalRecordService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 
 class DoctorMedicalRecordController extends Controller
@@ -34,8 +35,14 @@ class DoctorMedicalRecordController extends Controller
      */
     public function store(StoreMedicalRecordRequest $request)
     {
-        $medicalRecord = $this->medicalRecordService->createMedicalRecord($request->all());
-        return AppointmentMedicalRecordStoredResource::make($medicalRecord)->response();
+        try {
+            $medicalRecord = $this->medicalRecordService->createMedicalRecord($request->all());
+            return AppointmentMedicalRecordStoredResource::make($medicalRecord)->response();
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], $e->getCode() ?: 500);
+        }
     }
 
     /**
