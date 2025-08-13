@@ -69,7 +69,7 @@ return [
         'treatment' => 'Tratamiento',
         'notes' => 'Notas',
         'prescription' => 'Prescripción',
-        'medication_name' => 'Nombre del medicamento',
+        'medication_name' => 'Medicamento',
         'dosage' => 'Dosis',
         'frequency' => 'Frecuencia',
         'duration' => 'Duración',
