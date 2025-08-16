@@ -2,7 +2,6 @@
 
 namespace App\Broadcasting;
 
-use App\Models\User;
 use App\Services\WhatsappService;
 
 class WhatsappChannel
@@ -20,9 +19,14 @@ class WhatsappChannel
     /**
      * Send the given notification.
      */
-    public function send(User $notifiable, $notification): void
+    public function send($notifiable, $notification): void
     {
         $message = $notification->toWhatsapp($notifiable);
+
+        if (!$message || !$notifiable->phone) {
+            return;
+        }
+
         $this->whatsappService->sendMessage($notifiable->phone, $message['template'], $message['parameters']);
     }
 }

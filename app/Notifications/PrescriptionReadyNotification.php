@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Broadcasting\WhatsappChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -31,7 +32,7 @@ class PrescriptionReadyNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail', 'database'];
+        return ['mail', 'database', WhatsappChannel::class];
     }
 
     /**
@@ -63,5 +64,16 @@ class PrescriptionReadyNotification extends Notification
     {
         // Assuming the path is a local storage path, convert it to a public URL
         $this->path = Storage::url($this->path);
+    }
+
+    public function toWhatsapp(object $notifiable): array
+    {
+        return [
+            'template' => 'prescription_ready_es',
+            'parameters' => [
+                __('app.notifications.appointment_prescription_ready'),
+                url($this->path),
+            ],
+        ];
     }
 }
