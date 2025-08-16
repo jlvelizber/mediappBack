@@ -22,6 +22,10 @@ class Patient extends Model
         'doctor_id'
     ];
 
+    protected $casts = [
+        'dob' => 'date:Y-m-d',
+    ];
+
     /**
      * Get the user's full name.
      *
@@ -30,5 +34,14 @@ class Patient extends Model
     public function getFullNameAttribute(): string
     {
         return "{$this->name} {$this->lastname}";
+    }
+
+
+    /**
+     * Get age of the patient.
+     */
+    public function getAgeAttribute(): int
+    {
+        return abs(now()->diffInYears($this->dob));
     }
 }
