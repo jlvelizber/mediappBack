@@ -30,7 +30,7 @@
         </tr>
         <tr>
             <th>Especialidad</th>
-            <td>{{ $prescription->appointment->doctor->specialty }}</td>
+            <td>{{ $prescription->appointment->doctor->specialization }}</td>
 
         </tr>
 

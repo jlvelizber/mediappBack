@@ -51,6 +51,9 @@ return [
         'appointment_doctor_notification_line2' => 'El paciente te visitará el',
         'appointment_doctor_notification_action_line' => 'Ver cita',
         'appointment_doctor_notification_thanks' => 'Gracias por usar nuestra aplicación!',
+        'appointment_download_pdf' => 'Descargar Receta',
+        'appointment_prescription_ready' => 'Receta lista',
+        'appointment_prescription_ready_subject' => 'Tu receta está lista',
     ],
     'patients' => [
         'name' => 'Nombre',

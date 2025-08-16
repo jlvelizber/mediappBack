@@ -51,6 +51,9 @@ return [
         'appointment_doctor_notification_line2' => 'The patient will visit you on',
         'appointment_doctor_notification_action_line' => 'View appointment',
         'appointment_doctor_notification_thanks' => 'Thank you for using our application!',
+        'appointment_download_pdf' => 'Download Prescription',
+        'appointment_prescription_ready' => 'Prescription ready',
+        'appointment_prescription_ready_subject' => 'Your prescription is ready',
     ],
     'patients' => [
         'name' => 'Name',
