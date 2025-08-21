@@ -2,13 +2,15 @@
 
 namespace App\Jobs;
 
+use App\Jobs\Interface\JobRepositoryDependencyInterface;
 use App\Enum\AppointmentStatusEnum;
 use App\Repositories\Interface\AppointmentRepositoryInterface;
+use App\Repositories\Interface\RootRepositoryInterface;
 use Illuminate\Container\Attributes\Log;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
-class CancelPreviusAppointmentNotConfirmed implements ShouldQueue
+class CancelPreviusAppointmentNotConfirmed implements ShouldQueue, JobRepositoryDependencyInterface
 {
     use Queueable;
 
@@ -17,9 +19,9 @@ class CancelPreviusAppointmentNotConfirmed implements ShouldQueue
      */
     protected $appointmentRepository;
 
-    public function setDependency(AppointmentRepositoryInterface $appointmentRepository): void
+    public function setDependencies(RootRepositoryInterface ...$rootRepositoryInterface): void
     {
-        $this->appointmentRepository = $appointmentRepository;
+        $this->appointmentRepository = $rootRepositoryInterface[0];
     }
 
     /**

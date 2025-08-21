@@ -5,13 +5,20 @@ use Carbon\Carbon;
 use \Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-interface AppointmentRepositoryInterface
+interface AppointmentRepositoryInterface extends RootRepositoryInterface
 {
     /**
      * @param int $doctorId
      * @return Collection
      */
     public function findFutureAppointments(int $doctorId): ?Collection;
+
+
+    /**
+     * @param int $doctorId
+     * @return Collection
+     */
+    public function getAllFutureAppointments(): ?Collection;
 
 
     /**

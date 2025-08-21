@@ -7,7 +7,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use App\Models\Patient;
 
 
-interface PatientRepositoryInterface
+interface PatientRepositoryInterface extends RootRepositoryInterface
 {
     /**
      * Undocumented function

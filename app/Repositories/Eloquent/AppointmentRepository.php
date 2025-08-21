@@ -46,6 +46,18 @@ class AppointmentRepository extends BaseRepository implements AppointmentReposit
         $dateToday = now()->format('Y-m-d H:i:s');
         return $this->model->where('doctor_id', $doctorId)
             ->where('date_time', '>=', $dateToday)
+            ->where('status', '!=', AppointmentStatusEnum::COMPLETED)
+            ->orderBy('date_time', 'asc')
+            ->get();
+    }
+
+    /**
+     * Get All future appointments
+     */
+    public function getAllFutureAppointments(): ?Collection
+    {
+        $dateToday = now()->format('Y-m-d H:i:s');
+        return $this->model->where('date_time', '>=', $dateToday)
             ->where('status', AppointmentStatusEnum::PENDING)
             ->orderBy('date_time', 'asc')
             ->get();

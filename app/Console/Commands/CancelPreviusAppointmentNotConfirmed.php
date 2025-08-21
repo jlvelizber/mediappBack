@@ -33,7 +33,7 @@ class CancelPreviusAppointmentNotConfirmed extends Command
         // call the job to handle the cancellation
         $service = app(AppointmentRepositoryInterface::class);
         $job = new \App\Jobs\CancelPreviusAppointmentNotConfirmed();
-        $job->setDependency($service);
+        $job->setDependencies($service);
         dispatch($job);
 
 

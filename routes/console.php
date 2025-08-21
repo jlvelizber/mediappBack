@@ -8,3 +8,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote')->hourly();
 // Cancela las citas previas no confirmadas a las 3:00 AM cada día
 Schedule::command('appointments:cancel-not-confirmed')->dailyAt('03:00');
+Schedule::command('appointments:remind')->everyOddHour();

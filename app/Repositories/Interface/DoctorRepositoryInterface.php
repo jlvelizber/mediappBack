@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Interface;
 
-interface DoctorRepositoryInterface
+interface DoctorRepositoryInterface extends RootRepositoryInterface
 {
 
 }

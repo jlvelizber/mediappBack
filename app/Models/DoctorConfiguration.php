@@ -22,6 +22,8 @@ class DoctorConfiguration extends Model
         'medical_center_logo',
         'medical_center_website',
         'medical_center_social_media',
-        'medical_center_tax_id'
+        'medical_center_tax_id',
+        'notification_way',
+        'reminder_hour_appointment'
     ];
 }

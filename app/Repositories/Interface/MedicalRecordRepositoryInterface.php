@@ -4,7 +4,7 @@ namespace App\Repositories\Interface;
 
 use Illuminate\Database\Eloquent\Collection;
 
-interface MedicalRecordRepositoryInterface
+interface MedicalRecordRepositoryInterface extends RootRepositoryInterface
 {
     /**
      * Summary of getByPatient

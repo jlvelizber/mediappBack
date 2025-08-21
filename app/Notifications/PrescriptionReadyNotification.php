@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use App\Broadcasting\WhatsappChannel;
 use App\Enum\WayNotificationEnum;
+use App\Traits\ViaAppointmentNotificationTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -13,11 +14,9 @@ use Illuminate\Support\Facades\Storage;
 
 class PrescriptionReadyNotification extends Notification
 {
-    use Queueable;
+    use Queueable, ViaAppointmentNotificationTrait;
 
     public string $path;
-
-    public string $wayNotification;
 
     /**
      * Create a new notification instance.
@@ -30,22 +29,7 @@ class PrescriptionReadyNotification extends Notification
     }
 
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
-     */
-    public function via(object $notifiable): array
-    {
-        $via = match ($this->wayNotification) {
-            WayNotificationEnum::BOTH->value => ['database', WhatsappChannel::class, 'mail'],
-            WayNotificationEnum::WHATSAPP->value => [WhatsappChannel::class],
-            default => ['database', 'mail'],
-        };
 
-        return $via;
-
-    }
 
     /**
      * Get the mail representation of the notification.
@@ -71,7 +55,8 @@ class PrescriptionReadyNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'patient' => $notifiable->name,
+            'prescription_path' => $this->path
         ];
     }
 

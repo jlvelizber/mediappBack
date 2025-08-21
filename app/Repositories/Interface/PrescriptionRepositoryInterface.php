@@ -1,7 +1,7 @@
 <?php
 namespace App\Repositories\Interface;
 
-interface PrescriptionRepositoryInterface
+interface PrescriptionRepositoryInterface extends RootRepositoryInterface
 {
 
 }
