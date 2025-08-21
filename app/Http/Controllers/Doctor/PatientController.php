@@ -14,7 +14,7 @@ use Illuminate\Http\JsonResponse;
 class PatientController extends Controller
 {
 
-    protected PatientService $patientService;
+    private PatientService $patientService;
 
     public function __construct(PatientService $patientService)
     {
@@ -101,6 +101,23 @@ class PatientController extends Controller
             $patient = $this->patientService->getPatientByAppointment($doctorId, (int) $appointmentId);
             return PatientResource::make($patient)->response();
             //code...
+        } catch (\Throwable $th) {
+            // Handle the exception as needed, e.g., log it or return an error response
+            return response()->json(['error' => $th->getMessage()], 404);
+        }
+    }
+
+    /**
+     * Get All medical records by Patient
+     * @param \Illuminate\Http\Request $request
+     * @return void
+     */
+    public function records(Request $request, string $patientId): JsonResponse
+    {
+        try {
+            $doctorId = $request->user()->doctor->id;
+            $patient = $this->patientService->getMedicalRecords($doctorId, $patientId);
+            return PatientResource::make($patient)->response();
         } catch (\Throwable $th) {
             // Handle the exception as needed, e.g., log it or return an error response
             return response()->json(['error' => $th->getMessage()], 404);

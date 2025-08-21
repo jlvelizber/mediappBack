@@ -44,4 +44,13 @@ class Patient extends Model
     {
         return abs(now()->diffInYears($this->dob));
     }
+
+    /**
+     * Relationships
+     */
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
 }

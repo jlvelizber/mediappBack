@@ -12,11 +12,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MedicalRecordService
 {
-    protected MedicalRecordRepositoryInterface $medicalRecordRepositoryInterface;
-    protected PrescriptionRepositoryInterface $prescriptionRepositoryInterface;
+    private MedicalRecordRepositoryInterface $medicalRecordRepositoryInterface;
+    private PrescriptionRepositoryInterface $prescriptionRepositoryInterface;
 
-    public function __construct(MedicalRecordRepositoryInterface $medicalRecordRepositoryInterface, PrescriptionRepositoryInterface $prescriptionRepositoryInterface)
-    {
+    public function __construct(
+        MedicalRecordRepositoryInterface $medicalRecordRepositoryInterface,
+        PrescriptionRepositoryInterface $prescriptionRepositoryInterface
+    ) {
         $this->medicalRecordRepositoryInterface = $medicalRecordRepositoryInterface;
         $this->prescriptionRepositoryInterface = $prescriptionRepositoryInterface;
     }
@@ -95,15 +97,5 @@ class MedicalRecordService
     {
         $this->getClinicalHistoryByAppointmentId($id);
         return $this->medicalRecordRepositoryInterface->delete($id);
-    }
-
-    /**
-     * Get medical records by patient
-     * @param int $patientId
-     * @return Collection|null
-     */
-    public function getMedicalRecordsByPatient(int $patientId): ?Collection
-    {
-        return $this->medicalRecordRepository->getByPatient($patientId);
     }
 }

@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
+use App\Enum\AppointmentStatusEnum;
 use App\Models\Patient;
 use App\Repositories\Interface\PatientRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Validation\ValidationException;
@@ -136,5 +138,26 @@ class PatientService
             throw new NotFoundHttpException('Patient not found', null, Response::HTTP_NOT_FOUND);
 
         return $patient;
+    }
+
+
+    /**
+     * Get medical records by patient and appointments Completed status
+     * @param int $patientId
+     * @return Patient|null
+     */
+    public function getMedicalRecords(int $doctorId, string $patientId, $appointmentStatus = AppointmentStatusEnum::COMPLETED->value): ?Patient
+    {
+        $patient = $this->patientRepository->getPatientByDoctorId($doctorId, $patientId);
+        if (!$patient)
+            throw new ModelNotFoundException("Patient doesn't exist", Response::HTTP_NOT_FOUND);
+        return $patient->with([
+            'appointments' => function ($query) use ($appointmentStatus) {
+                $query->where('status', $appointmentStatus);
+            },
+            'appointments.prescription',
+            'appointments.prescription.items'
+        ])->find($patientId);
+
     }
 }

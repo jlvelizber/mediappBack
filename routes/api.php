@@ -69,6 +69,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('paginate', [DoctorPatientController::class, 'paginate']);
         });
         Route::apiResource('patients', DoctorPatientController::class);
+        Route::get('patients/{patient}/records', [DoctorPatientController::class, 'records']);
         Route::get('patients/appointment/{patient}', [DoctorPatientController::class, 'getPatientByAppointment']);
         //Appointments
         Route::group([
