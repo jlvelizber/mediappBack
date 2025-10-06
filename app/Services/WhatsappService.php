@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 
 class WhatsappService
 {
@@ -18,7 +19,7 @@ class WhatsappService
 
     public function sendMessage($to, $template, $parameters = [])
     {
-        $url = "https://graph.facebook.com/v18.0/{$this->phoneNumberId}/messages";
+        $url = "https://graph.facebook.com/v22.0/{$this->phoneNumberId}/messages";
 
         $body = [
             "messaging_product" => "whatsapp",
@@ -26,7 +27,7 @@ class WhatsappService
             "type" => "template",
             "template" => [
                 "name" => $template,
-                "language" => ["code" => "es"],
+                "language" => ["code" => "es_EC"],
                 "components" => [
                     [
                         "type" => "body",
@@ -35,14 +36,24 @@ class WhatsappService
                 ]
             ]
         ];
-
-        $response = $this->client->post($url, [
-            'headers' => [
-                'Authorization' => "Bearer {$this->accessToken}",
-                'Content-Type' => 'application/json',
-            ],
-            'json' => $body,
-        ]);
+        try {
+            Log::info('Sending WhatsApp message', [
+                'url' => $url,
+                'body' => $body,
+            ]);
+            $response = $this->client->post($url, [
+                'headers' => [
+                    'Authorization' => "Bearer {$this->accessToken}",
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => $body,
+            ]);
+           
+        } catch (\Throwable $th) {
+           Log::error('Error sending WhatsApp message', [
+            'error' => $th->getMessage(),
+           ]);
+        }
 
         return json_decode($response->getBody()->getContents(), true);
     }
