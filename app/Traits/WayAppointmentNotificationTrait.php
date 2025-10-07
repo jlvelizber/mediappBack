@@ -7,7 +7,7 @@ use App\Enum\WayNotificationEnum;
 /**
  * Ayuda a detectar la via en la forma en que se enviara las notificaciones
  */
-trait ViaAppointmentNotificationTrait
+trait WayAppointmentNotificationTrait
 {
 
     private string $wayNotification;

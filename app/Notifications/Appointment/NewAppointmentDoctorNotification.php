@@ -3,6 +3,7 @@
 namespace App\Notifications\Appointment;
 
 use App\Models\Appointment;
+use App\Traits\WayAppointmentNotificationTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -10,7 +11,7 @@ use Illuminate\Notifications\Notification;
 
 class NewAppointmentDoctorNotification extends Notification
 {
-    use Queueable;
+    use Queueable, WayAppointmentNotificationTrait;
 
     protected $appointment;
 
@@ -22,16 +23,7 @@ class NewAppointmentDoctorNotification extends Notification
         $this->appointment = $appointment;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
-     */
-    public function via(object $notifiable): array
-    {
-        return ['mail'];
-    }
-
+   
     /**
      * Get the mail representation of the notification.
      */

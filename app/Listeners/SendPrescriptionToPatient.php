@@ -4,7 +4,7 @@ namespace App\Listeners;
 
 use App\Enum\WayNotificationEnum;
 use App\Events\PrescriptionReadyEvent;
-use App\Notifications\PrescriptionReadyNotification;
+use App\Notifications\Prescription\PrescriptionReadyNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 

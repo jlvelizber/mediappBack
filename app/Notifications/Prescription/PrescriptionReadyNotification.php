@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Prescription;
 
 use App\Broadcasting\WhatsappChannel;
 use App\Enum\WayNotificationEnum;
-use App\Traits\ViaAppointmentNotificationTrait;
+use App\Traits\WayAppointmentNotificationTrait;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Log;
@@ -14,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 
 class PrescriptionReadyNotification extends Notification
 {
-    use Queueable, ViaAppointmentNotificationTrait;
+    use Queueable, WayAppointmentNotificationTrait;
 
     public string $path;
 
@@ -74,9 +73,9 @@ class PrescriptionReadyNotification extends Notification
             'path' => $this->path,
         ]);
         return [
-            'template' => 'prescription_ready_es',
+            'template' => 'prescription_ready',
             'parameters' => [
-                __('app.notifications.appointment_prescription_ready'),
+                $notifiable->name,
                 url($this->path),
             ],
         ];

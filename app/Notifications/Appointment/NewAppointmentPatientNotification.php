@@ -4,13 +4,14 @@ namespace App\Notifications\Appointment;
 
 use App\Broadcasting\WhatsappChannel;
 use App\Models\Appointment;
+use App\Traits\WayAppointmentNotificationTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class NewAppointmentPatientNotification extends Notification
 {
-    use Queueable;
+    use Queueable, WayAppointmentNotificationTrait;
 
     protected $appointment;
 
@@ -20,16 +21,6 @@ class NewAppointmentPatientNotification extends Notification
     public function __construct(Appointment $appointment)
     {
         $this->appointment = $appointment;
-    }
-
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
-     */
-    public function via(object $notifiable): array
-    {
-        return ['mail', WhatsappChannel::class];
     }
 
     /**

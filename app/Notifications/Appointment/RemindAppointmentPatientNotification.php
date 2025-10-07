@@ -3,7 +3,7 @@
 namespace App\Notifications\Appointment;
 
 use App\Enum\WayNotificationEnum;
-use App\Traits\ViaAppointmentNotificationTrait;
+use App\Traits\WayAppointmentNotificationTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -11,7 +11,7 @@ use Illuminate\Notifications\Notification;
 
 class RemindAppointmentPatientNotification extends Notification implements ShouldQueue
 {
-    use Queueable, ViaAppointmentNotificationTrait;
+    use Queueable, WayAppointmentNotificationTrait;
 
 
     /**
