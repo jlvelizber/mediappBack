@@ -45,4 +45,18 @@ class RemindAppointmentPatientNotification extends Notification implements Shoul
             //
         ];
     }
+
+
+    
+    /**
+     * Get the array representation of the notification.
+     *
+     * @return array<string, mixed>
+     */
+    public function toWhatsapp(object $notifiable): array
+    {
+        return [
+            //
+        ];
+    }
 }

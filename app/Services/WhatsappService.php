@@ -28,6 +28,10 @@ class WhatsappService
             return false;
         }
 
+        if(!$template) {
+            Log::error('Template not configured');
+        }
+
         // Formatear número de teléfono (remover + y espacios)
         $formattedPhone = preg_replace('/[^0-9]/', '', $to);
         
