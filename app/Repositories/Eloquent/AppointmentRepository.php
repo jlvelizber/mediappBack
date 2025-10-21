@@ -9,6 +9,7 @@ use App\Repositories\BaseRepository;
 use App\Repositories\Interface\DoctorConfigurationRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Log;
 
@@ -42,11 +43,34 @@ class AppointmentRepository extends BaseRepository implements AppointmentReposit
      */
     public function findFutureAppointments(int $doctorId): ?Collection
     {
-
         $dateToday = now()->format('Y-m-d H:i:s');
-        return $this->model->where('doctor_id', $doctorId)
+        
+        // Obtener valores de status válidos (excluyendo COMPLETED)
+        $validStatuses = array_filter(
+            array_column(AppointmentStatusEnum::cases(), 'value'),
+            fn($status) => $status !== AppointmentStatusEnum::COMPLETED->value
+        );
+        
+        return $this->model
+            ->select([
+                'id',
+                'doctor_id',
+                'patient_id',
+                'date_time',
+                'status',
+                'reason',
+                'duration_minutes',
+                'created_at',
+                'updated_at'
+            ])
+            ->with([
+                'patient' => function ($query) {
+                    $query->select('id', 'name', 'lastname', 'phone', 'email');
+                }
+            ])
+            ->where('doctor_id', $doctorId)
             ->where('date_time', '>=', $dateToday)
-            ->where('status', '!=', AppointmentStatusEnum::COMPLETED)
+            ->whereIn('status', $validStatuses)
             ->orderBy('date_time', 'asc')
             ->get();
     }
@@ -68,7 +92,7 @@ class AppointmentRepository extends BaseRepository implements AppointmentReposit
      * Summary of getDoctorAppointments
      * @param int $doctorId
      * @param mixed $date
-     * @return Collection<Model>
+     * @return Collection
      */
     public function getDoctorAppointmentsByDate(int $doctorId, Carbon $date): ?Collection
     {
@@ -146,12 +170,11 @@ class AppointmentRepository extends BaseRepository implements AppointmentReposit
      */
     public function getPreviousAppointmentsNotConfirmed(): Collection
     {
-        $dateToday = now()->startOfDay()->format('Y-m-d 00:00:00');
+        $dateToday = now()->startOfDay()->format('Y-m-d H:i:s');
         Log::info('Cancelling previous appointments not confirmed before: ' . $dateToday);
         return $this->model->where('status', AppointmentStatusEnum::PENDING)
             ->where('date_time', '<', $dateToday)
             ->get();
-
     }
 
     /**
@@ -163,7 +186,7 @@ class AppointmentRepository extends BaseRepository implements AppointmentReposit
      */
     public function queryAppointmentByRangeDate(string|int $doctorId, string $startDate, string $endDate): Collection
     {
-        return $this->model->whereBetween('date_time', [$startDate, $endDate])
+        return $this->model
             ->with([
                 'patient' => function ($query) {
                     $query->select('id', 'name', 'lastname');
@@ -186,6 +209,23 @@ class AppointmentRepository extends BaseRepository implements AppointmentReposit
             ->selectRaw('DATE_FORMAT(date_time, "%Y-%m-%d") as date')
             ->orderBy('date_time', 'asc')
             ->get();
+    }
+
+
+     /**
+     * Weekly resume
+     * @param int $doctorId
+     * @param string $weekStart
+     * @param string $weekEnd
+     * @return int
+     */
+    public function getWeeklyResume(int $doctorId, string $weekStart, string $weekEnd): SupportCollection
+    {
+        return $this->model->where('doctor_id', $doctorId)
+            ->whereBetween('date_time', [$weekStart, $weekEnd])
+            ->selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
     }
 
 

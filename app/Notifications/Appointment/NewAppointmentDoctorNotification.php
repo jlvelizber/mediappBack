@@ -2,6 +2,7 @@
 
 namespace App\Notifications\Appointment;
 
+use App\Enum\WayNotificationEnum;
 use App\Models\Appointment;
 use App\Traits\WayAppointmentNotificationTrait;
 use Illuminate\Bus\Queueable;
@@ -18,9 +19,10 @@ class NewAppointmentDoctorNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct(Appointment $appointment)
+    public function __construct(Appointment $appointment, string $wayNotification = WayNotificationEnum::BOTH->value)
     {
         $this->appointment = $appointment;
+        $this->wayNotification = $wayNotification;
     }
 
    
@@ -49,6 +51,19 @@ class NewAppointmentDoctorNotification extends Notification
     {
         return [
             //
+        ];
+    }
+
+
+    public function toWhatsapp(object $notifiable) : array
+    {
+        return [
+            'template' => "appointment_confirmation_for_doctor",
+            'parameters' => [
+                $this->appointment->doctor->user->name,
+                $this->appointment->patient->name,
+                $this->appointment->date_time
+            ],
         ];
     }
 }

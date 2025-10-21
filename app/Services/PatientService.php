@@ -160,4 +160,15 @@ class PatientService
         ])->find($patientId);
 
     }
+
+
+    /**
+     * Get total patients 
+     * @param int $doctorId
+     * @return int
+     */
+    public function getTotalPatientsByDoctorId(int $doctorId): int
+    {
+        return $this->patientRepository->getTotalPatientsByDoctorId($doctorId);
+    }
 }

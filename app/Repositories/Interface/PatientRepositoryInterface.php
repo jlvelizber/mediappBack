@@ -50,4 +50,11 @@ interface PatientRepositoryInterface extends RootRepositoryInterface
      */
     public function getPatientByAppointment($doctorId, $appointmentId): Patient|null;
 
+
+    /**
+     * Get total patients by doctorId
+     * @param int $doctorId
+     */
+    public function getTotalPatientsByDoctorId($doctorId): int;
+
 }

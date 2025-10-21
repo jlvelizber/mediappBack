@@ -11,6 +11,7 @@ use App\Http\Controllers\Doctor\{
 };
 use App\Http\Controllers\Admin\DoctorController;
 
+use App\Http\Controllers\Doctor\DoctorDashboardController;
 use App\Http\Controllers\Doctor\DoctorMedicalRecordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +47,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Doctor Rooutes
     Route::middleware(['role:doctor'])->group(function () {
 
+        Route::get('/dashboard', [DoctorDashboardController::class,'index']);
+
         // available times for the doctor
         Route::apiResource(
             'availabilities',
@@ -79,7 +82,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         });
         Route::put('appointments/{appointment}/status', [DoctorAppointmentController::class, 'updateStatus']);
         Route::apiResource('appointments', DoctorAppointmentController::class);
-
+        
         // Clinical Histories
 
         Route::apiResource('medical-record', DoctorMedicalRecordController::class, [

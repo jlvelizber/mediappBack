@@ -26,17 +26,16 @@ class CancelPreviusAppointmentNotConfirmed extends Command
      */
     public function handle()
     {
-        // Logic to change the status of previous appointments that are not confirmed to cancelled
-        // This is a placeholder for the actual implementation
         $this->info('Changing status of previous appointments that are not confirmed to cancelled...');
 
-        // call the job to handle the cancellation
-        $service = app(AppointmentRepositoryInterface::class);
+        // Usar Job pero ejecutarlo síncronamente para mejor control
+        $appointmentRepository = app(AppointmentRepositoryInterface::class);
         $job = new \App\Jobs\CancelPreviusAppointmentNotConfirmed();
-        $job->setDependencies($service);
-        dispatch($job);
-
-
-        $this->info('Previous appointments that were not confirmed have been cancelled.');
+        $job->setDependencies($appointmentRepository);
+        
+        // Ejecutar síncronamente para evitar problemas de cola
+        $job->handle();
+        
+        $this->info('Previous appointments cancellation job completed successfully.');
     }
 }

@@ -6,6 +6,7 @@ use App\Enum\AppointmentStatusEnum;
 use App\Models\Appointment;
 use App\Repositories\Interface\AppointmentRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Validation\ValidationException;
@@ -114,5 +115,18 @@ class AppointmentService
     public function getAppointmentsByDateRange(string|int $doctorId, string $startDate, string $endDate): Collection
     {
         return $this->appointmentRepository->queryAppointmentByRangeDate($doctorId, $startDate, $endDate);
+    }
+
+
+      /**
+     * Weekly resume
+     * @param int $doctorId
+     * @param string $weekStart
+     * @param string $weekEnd
+     * @return int
+     */
+    public function getWeeklyResume(int $doctorId, string $weekStart, string $weekEnd): ?SupportCollection
+    {
+        return $this->appointmentRepository->getWeeklyResume($doctorId, $weekStart, $weekEnd);
     }
 }

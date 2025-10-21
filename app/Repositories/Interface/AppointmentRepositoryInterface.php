@@ -3,6 +3,7 @@
 namespace App\Repositories\Interface;
 use Carbon\Carbon;
 use \Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 interface AppointmentRepositoryInterface extends RootRepositoryInterface
@@ -58,6 +59,16 @@ interface AppointmentRepositoryInterface extends RootRepositoryInterface
      * @return Collection
      */
     public function queryAppointmentByRangeDate(string|int $doctorId, string $startDate, string $endtDate): Collection;
+
+
+    /**
+     * Weekly resume
+     * @param int $doctorId
+     * @param string $weekStart
+     * @param string $weekEnd
+     * @return int
+     */
+    public function getWeeklyResume(int $doctorId, string $weekStart, string $weekEnd): SupportCollection;
 
 
 

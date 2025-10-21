@@ -91,4 +91,14 @@ class PatientRepository extends BaseRepository implements PatientRepositoryInter
         }
         return null;
     }
+
+
+     /**
+     * Get total patients by doctorId
+     * @param int $doctorId
+     */
+    public function getTotalPatientsByDoctorId($doctorId): int
+    {
+        return $this->model->where('doctor_id',$doctorId)->count();
+    }
 }

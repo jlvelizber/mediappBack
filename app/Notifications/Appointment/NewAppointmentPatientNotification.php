@@ -3,6 +3,7 @@
 namespace App\Notifications\Appointment;
 
 use App\Broadcasting\WhatsappChannel;
+use App\Enum\WayNotificationEnum;
 use App\Models\Appointment;
 use App\Traits\WayAppointmentNotificationTrait;
 use Illuminate\Bus\Queueable;
@@ -18,9 +19,10 @@ class NewAppointmentPatientNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct(Appointment $appointment)
+    public function __construct(Appointment $appointment, string $wayNotification = WayNotificationEnum::BOTH->value)
     {
         $this->appointment = $appointment;
+        $this->wayNotification = $wayNotification;
     }
 
     /**
