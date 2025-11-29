@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enum\AppointmentStatusEnum;
 use App\Models\Appointment;
 use App\Repositories\Interface\AppointmentRepositoryInterface;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Http\Response;
@@ -115,6 +116,23 @@ class AppointmentService
     public function getAppointmentsByDateRange(string|int $doctorId, string $startDate, string $endDate): Collection
     {
         return $this->appointmentRepository->queryAppointmentByRangeDate($doctorId, $startDate, $endDate);
+    }
+
+
+    /**
+     * Get completed appointments from the start of the day until now
+     * @param string|int $doctorId
+     */
+    public function getTodayCompletedAppointments(string|int $doctorId): Collection
+    {
+        $startOfDay = Carbon::now()->startOfDay();
+        $now = Carbon::now();
+
+        return $this->appointmentRepository->getCompletedAppointmentsBetween(
+            (int) $doctorId,
+            $startOfDay,
+            $now
+        );
     }
 
 

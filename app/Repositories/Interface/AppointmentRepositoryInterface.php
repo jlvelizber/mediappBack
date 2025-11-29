@@ -29,6 +29,14 @@ interface AppointmentRepositoryInterface extends RootRepositoryInterface
      */
     public function getDoctorAppointmentsByDate(int $doctorId, Carbon $date): ?Collection;
 
+    /**
+     * Get completed appointments between two datetimes
+     * @param int $doctorId
+     * @param Carbon $startDateTime
+     * @param Carbon $endDateTime
+     */
+    public function getCompletedAppointmentsBetween(int $doctorId, Carbon $startDateTime, Carbon $endDateTime): Collection;
+
 
 
     /**

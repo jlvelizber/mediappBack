@@ -102,6 +102,20 @@ class AppointmentRepository extends BaseRepository implements AppointmentReposit
             ->get();
     }
 
+    public function getCompletedAppointmentsBetween(int $doctorId, Carbon $startDateTime, Carbon $endDateTime): Collection
+    {
+        return $this->model->where('doctor_id', $doctorId)
+            ->whereBetween('date_time', [$startDateTime, $endDateTime])
+            ->where('status', AppointmentStatusEnum::COMPLETED)
+            ->with([
+                'patient' => function ($query) {
+                    $query->select('id', 'name', 'lastname');
+                }
+            ])
+            ->orderBy('date_time', 'desc')
+            ->get();
+    }
+
     /**
      * @param array $data
      * @return LengthAwarePaginator

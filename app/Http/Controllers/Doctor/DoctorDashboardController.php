@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class DoctorDashboardController extends Controller
-{   
+{
     private AppointmentService $appointmentService;
 
     private PatientService $patientService;
@@ -18,8 +18,7 @@ class DoctorDashboardController extends Controller
     public function __construct(
         AppointmentService $appointmentService,
         PatientService $patientService
-    )
-    {
+    ) {
         $this->appointmentService = $appointmentService;
         $this->patientService = $patientService;
     }
@@ -28,12 +27,14 @@ class DoctorDashboardController extends Controller
         $doctorId = $request->user()->doctor->id;
         $startDate = Carbon::today()->format('Y-m-d');
         $endDate = $startDate;
-        
+
 
         // today appointments
         $todayAppointments = $this->appointmentService->getAppointmentsByDateRange($doctorId, $startDate, $endDate);
         // total patients by doctor
         $totalPatients = $this->patientService->getTotalPatientsByDoctorId($doctorId);
+        //total appointments today 
+        $recentAppointments = $this->appointmentService->getTodayCompletedAppointments($doctorId);
 
         //total Appointments weekly
         $weekStart = Carbon::now()->startOfWeek();
@@ -42,13 +43,14 @@ class DoctorDashboardController extends Controller
 
 
         //Proxima cita
-        $nextAppointment =  $this->appointmentService->getFutureAppointments($doctorId);
+        $nextAppointment = $this->appointmentService->getFutureAppointments($doctorId);
 
         return response()->json([
             'todayAppointments' => $todayAppointments->count(),
-            'totalPatients'=> $totalPatients,
+            'totalPatients' => $totalPatients,
             'weeklyStats' => $weeklyStats,
-            'nextAppointment'=> $nextAppointment
+            'nextAppointment' => $nextAppointment,
+            'completedAppointments' => $recentAppointments->count(),
         ]);
     }
 }
