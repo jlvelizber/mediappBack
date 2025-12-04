@@ -78,6 +78,15 @@ interface AppointmentRepositoryInterface extends RootRepositoryInterface
      */
     public function getWeeklyResume(int $doctorId, string $weekStart, string $weekEnd): SupportCollection;
 
+    /**
+     * Get completed appointments grouped by day for the last 30 days
+     * @param int $doctorId
+     * @param Carbon $startDate
+     * @param Carbon $endDate
+     * @return Collection
+     */
+    public function getCompletedAppointmentsByDay(int $doctorId, Carbon $startDate, Carbon $endDate): Collection;
+
 
 
 }

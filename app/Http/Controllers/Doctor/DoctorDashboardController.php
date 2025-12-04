@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Doctor;
 
+use App\Enum\DaysWeekEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AppointmentResource;
 use App\Services\AppointmentService;
@@ -41,9 +42,24 @@ class DoctorDashboardController extends Controller
         $weekEnd = Carbon::now()->endOfWeek();
         $weeklyStats = $this->appointmentService->getWeeklyResume($doctorId, $weekStart, $weekEnd);
 
+        // Completed appointments last 30 days for chart
+        $chartData = $this->appointmentService->getCompletedAppointmentsLast30Days($doctorId);
 
         //Proxima cita
         $nextAppointment = $this->appointmentService->getFutureAppointments($doctorId);
+
+        // Map chart data with formatted dates
+        $formattedChartData = $chartData->map(function ($item) {
+            $date = Carbon::parse($item->date);
+            // Get day name abbreviation in Spanish
+            $dayNames = DaysWeekEnum::toArray();
+            $dayName = $dayNames[$date->dayOfWeek];
+            
+            return [
+                'date' => $dayName . ' ' . $date->format('d/m'),
+                'total' => (int) $item->total,
+            ];
+        })->values();
 
         return response()->json([
             'todayAppointments' => $todayAppointments->count(),
@@ -51,6 +67,8 @@ class DoctorDashboardController extends Controller
             'weeklyStats' => $weeklyStats,
             'nextAppointment' => $nextAppointment,
             'completedAppointments' => $recentAppointments->count(),
+            'recentAppointments' => AppointmentResource::collection($recentAppointments),
+            'chartData' => $formattedChartData,
         ]);
     }
 }

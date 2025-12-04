@@ -147,4 +147,17 @@ class AppointmentService
     {
         return $this->appointmentRepository->getWeeklyResume($doctorId, $weekStart, $weekEnd);
     }
+
+    /**
+     * Get completed appointments grouped by day for the last 30 days
+     * @param int $doctorId
+     * @return Collection
+     */
+    public function getCompletedAppointmentsLast30Days(int $doctorId): Collection
+    {
+        $startDate = Carbon::now()->subDays(30)->startOfDay();
+        $endDate = Carbon::now()->endOfDay();
+
+        return $this->appointmentRepository->getCompletedAppointmentsByDay($doctorId, $startDate, $endDate);
+    }
 }

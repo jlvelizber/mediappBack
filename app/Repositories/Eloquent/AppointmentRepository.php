@@ -242,5 +242,24 @@ class AppointmentRepository extends BaseRepository implements AppointmentReposit
             ->pluck('total', 'status');
     }
 
+    /**
+     * Get completed appointments grouped by day for the last 30 days
+     * @param int $doctorId
+     * @param Carbon $startDate
+     * @param Carbon $endDate
+     * @return Collection
+     */
+    public function getCompletedAppointmentsByDay(int $doctorId, Carbon $startDate, Carbon $endDate): Collection
+    {
+        return $this->model->where('doctor_id', $doctorId)
+            ->whereBetween('date_time', [$startDate, $endDate])
+            ->where('status', AppointmentStatusEnum::COMPLETED)
+            ->selectRaw('DATE(date_time) as date, COUNT(*) as total')
+            ->selectRaw('DAYNAME(date_time) as day_name')
+            ->groupBy('date', 'day_name')
+            ->orderBy('date', 'asc')
+            ->get();
+    }
+
 
 }
