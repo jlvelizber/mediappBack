@@ -138,7 +138,7 @@ class AppointmentRepository extends BaseRepository implements AppointmentReposit
             )
             ->selectRaw('DATE_FORMAT(date_time, "%H:%i") as time')
             ->selectRaw('DATE_FORMAT(date_time, "%Y-%m-%d") as date')
-            ->orderByRaw("FIELD(status, '" . AppointmentStatusEnum::CONFIRMED->value . "', '" . AppointmentStatusEnum::PENDING->value . "', '" . AppointmentStatusEnum::CANCELLED->value . "') ASC")
+            ->orderByRaw("FIELD(status, '" . AppointmentStatusEnum::CONFIRMED->value . "', '" . AppointmentStatusEnum::PENDING->value . "', '" . AppointmentStatusEnum::CANCELLED->value . "', '" . AppointmentStatusEnum::COMPLETED->value . "') ASC")
             ->orderByRaw('ABS(TIMESTAMPDIFF(SECOND, date_time, NOW()))')
             ->paginate(config('mediapp.appointment.paginate'));
     }
@@ -186,7 +186,7 @@ class AppointmentRepository extends BaseRepository implements AppointmentReposit
     {
         $dateToday = now()->startOfDay()->format('Y-m-d H:i:s');
         Log::info('Cancelling previous appointments not confirmed before: ' . $dateToday);
-        return $this->model->where('status', AppointmentStatusEnum::PENDING)
+        return $this->model->whereIn('status', [AppointmentStatusEnum::PENDING->value, AppointmentStatusEnum::CONFIRMED->value])
             ->where('date_time', '<', $dateToday)
             ->get();
     }

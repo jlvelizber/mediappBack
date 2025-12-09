@@ -48,6 +48,7 @@ class AppointmentController extends Controller
     {
         $appointment = $this->appointmentService->createAppointment($request->all());
         event(new AppointmentCreated($appointment));
+        // dd($appointment);
         return AppointmentResource::make($appointment)->response();
     }
 

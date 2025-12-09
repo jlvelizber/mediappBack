@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -45,6 +46,11 @@ class Appointment extends Model
     protected $casts = [
         'date_time' => 'datetime:Y-m-d H:i'
     ];
+
+    public function getDateTimeWhatsappNotificationAttribute()
+    {
+        return Carbon::parse($this->date_time)->locale('es')->isoFormat('dddd, DD [de] MMMM [de] YYYY [a las] HH:mm');
+    }
 
     /**
      * Scopes

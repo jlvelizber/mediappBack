@@ -37,7 +37,7 @@ class NewAppointmentDoctorNotification extends Notification
             ->line(__('app.notifications.appointment_doctor_notification_line1', [
                 'patient' => $this->appointment->patient->full_name,
             ]))
-            ->line(__('app.notifications.appointment_doctor_notification_line2') . ' ' . $this->appointment->date_time)
+            ->line(__('app.notifications.appointment_doctor_notification_line2') . ' ' . $this->appointment->date_time_whatsapp_notification)
             ->action(__('app.notifications.appointment_doctor_notification_action_line'), url(config('app.url') . '/appointments/' . $this->appointment->id))
             ->line(__('app.notifications.appointment_doctor_notification_thanks'));
     }
@@ -62,7 +62,7 @@ class NewAppointmentDoctorNotification extends Notification
             'parameters' => [
                 $this->appointment->doctor->user->name,
                 $this->appointment->patient->name,
-                $this->appointment->date_time
+                $this->appointment->date_time_whatsapp_notification
             ],
         ];
     }

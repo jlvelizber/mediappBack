@@ -19,7 +19,7 @@ enum AppointmentStatusEnum: string
             default => __('app.appointments.status.pending'),
         };
     }
-    public static function translateByValue(string $value): string
+    public static function translateByValue(string | AppointmentStatusEnum $value): string
     {
         return match ($value) {
             self::PENDING->value => __('app.appointments.status.pending'),

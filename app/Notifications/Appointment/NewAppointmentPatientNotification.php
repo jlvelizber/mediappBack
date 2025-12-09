@@ -37,7 +37,7 @@ class NewAppointmentPatientNotification extends Notification
                 'doctor' => $this->appointment->doctor->user->fullName,
                 'specialization' => $this->appointment->doctor->specialization,
             ]))
-            ->line(__('app.notifications.appointment_patient_notification_line2') . ' ' . $this->appointment->date_time)
+            ->line(__('app.notifications.appointment_patient_notification_line2') . ' ' . $this->appointment->date_time_whatsapp_notification)
             ->line(__('app.notifications.appointment_notification_thanks'));
     }
 
@@ -61,11 +61,10 @@ class NewAppointmentPatientNotification extends Notification
     public function toWhatsapp(object $notifiable): array
     {
         return [
-            'template' => "appointment_confirmation",
+            'template' => "appointment_confirmation_new",
             'parameters' => [
                 $this->appointment->patient->name,
-                $this->appointment->date_time,
-                $this->appointment->date_time
+                $this->appointment->date_time_whatsapp_notification
             ],
         ];
     }

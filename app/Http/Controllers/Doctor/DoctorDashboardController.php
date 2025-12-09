@@ -51,12 +51,15 @@ class DoctorDashboardController extends Controller
         // Map chart data with formatted dates
         $formattedChartData = $chartData->map(function ($item) {
             $date = Carbon::parse($item->date);
-            // Get day name abbreviation in Spanish
-            $dayNames = DaysWeekEnum::toArray();
-            $dayName = $dayNames[$date->dayOfWeek];
+            // Get day name using DaysWeekEnum and translations
+            $dayKey = DaysWeekEnum::getKeyByIndex($date->dayOfWeek);
+            $dayTranslationKey = 'app.days.' . $dayKey;
+            $dayFullName = __($dayTranslationKey);
+            // Get abbreviation (first 3 characters)
+            $dayAbbreviation = mb_substr($dayFullName, 0, 3);
             
             return [
-                'date' => $dayName . ' ' . $date->format('d/m'),
+                'date' => $dayAbbreviation . ' ' . $date->format('d/m'),
                 'total' => (int) $item->total,
             ];
         })->values();

@@ -26,6 +26,7 @@ class AppointmentPaginateResource extends JsonResource
             'duration_minutes' => $this->duration_minutes,
             'date_time' => $this->date_time->format('Y-m-d H:i:s'), // Ensure date_time is formatted correctly
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+            'medical_record_id' => $this->medicalRecord?->id,
         ];
     }
 }
