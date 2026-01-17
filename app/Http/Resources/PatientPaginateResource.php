@@ -19,7 +19,8 @@ class PatientPaginateResource extends JsonResource
             'document' => $this->document,
             'name' => $this->full_name,
             'email' => $this->email,
-            'phone' => $this->phone
+            'phone' => $this->phone,
+            'age' => $this->age,
         ];
     }
 }
