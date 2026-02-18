@@ -151,14 +151,24 @@ class PatientService
         $patient = $this->patientRepository->getPatientByDoctorId($doctorId, $patientId);
         if (!$patient)
             throw new ModelNotFoundException("Patient doesn't exist", Response::HTTP_NOT_FOUND);
+        
+
         return $patient->with([
             'appointments' => function ($query) use ($appointmentStatus) {
-                $query->where('status', $appointmentStatus);
-            },
-            'appointments.prescription',
-            'appointments.prescription.items'
+                $query
+                    // Seleccionamos solo las columnas necesarias de la cita
+                    ->select('id', 'patient_id', 'doctor_id', 'date_time', 'status', 'reason', 'duration_minutes')
+                    // Campo calculado: has_prescription = true si existe una prescripción asociada
+                    ->withExists(['prescription as has_prescription'])
+                    ->with([
+                        'medicalRecord' => function($mrQuery) {
+                            $mrQuery->select('id','appointment_id');
+                        }
+                    ])
+                    ->where('status', $appointmentStatus)
+                    ->orderBy('date_time', 'desc');
+            }
         ])->find($patientId);
-
     }
 
 
