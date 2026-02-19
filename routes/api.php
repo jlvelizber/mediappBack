@@ -7,7 +7,8 @@ use App\Http\Controllers\Admin\{
 use App\Http\Controllers\Doctor\{
     DoctorAvailabilityController as DoctorDoctorAvailabilityController,
     AppointmentController as DoctorAppointmentController,
-    PatientController as DoctorPatientController
+    PatientController as DoctorPatientController,
+    DoctorPrescriptionController
 };
 use App\Http\Controllers\Admin\DoctorController;
 
@@ -81,8 +82,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('paginate', [DoctorAppointmentController::class, 'paginate']);
         });
         Route::put('appointments/{appointment}/status', [DoctorAppointmentController::class, 'updateStatus']);
+        Route::get('appointments/{appointment}/prescription/download', [DoctorPrescriptionController::class, 'download'])
+            ->name('appointments.prescription.download');
         Route::apiResource('appointments', DoctorAppointmentController::class);
-        
+
         // Clinical Histories
 
         Route::apiResource('medical-record', DoctorMedicalRecordController::class, [
