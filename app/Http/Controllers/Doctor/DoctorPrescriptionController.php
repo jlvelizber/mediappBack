@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Doctor;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use App\Services\PrescriptionPdfService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -42,5 +43,27 @@ class DoctorPrescriptionController extends Controller
                 'Content-Disposition' => 'attachment; filename="' . $result['filename'] . '"',
             ]
         );
+    }
+
+    /**
+     * Reenvía la prescripción al paciente disparando PrescriptionReadyEvent.
+     */
+    public function resend(Request $request, Appointment $appointment): JsonResponse
+    {
+        $doctorId = $request->user()->doctor?->id;
+        if (!$doctorId || (int) $appointment->doctor_id !== (int) $doctorId) {
+            abort(403, 'No autorizado para esta prescripción.');
+        }
+
+        $prescription = $appointment->prescription;
+        if (!$prescription) {
+            throw new NotFoundHttpException('Esta cita no tiene prescripción.');
+        }
+
+        $this->prescriptionPdfService->generateAndStore($prescription, notifyPatient: true);
+
+        return response()->json([
+            'message' => 'Receta reenviada al paciente correctamente.',
+        ]);
     }
 }

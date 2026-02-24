@@ -84,6 +84,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::put('appointments/{appointment}/status', [DoctorAppointmentController::class, 'updateStatus']);
         Route::get('appointments/{appointment}/prescription/download', [DoctorPrescriptionController::class, 'download'])
             ->name('appointments.prescription.download');
+        Route::post('appointments/{appointment}/prescription/resend', [DoctorPrescriptionController::class, 'resend'])
+            ->name('appointments.prescription.resend');
         Route::apiResource('appointments', DoctorAppointmentController::class);
 
         // Clinical Histories
