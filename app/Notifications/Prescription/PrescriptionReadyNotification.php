@@ -5,6 +5,7 @@ namespace App\Notifications\Prescription;
 use App\Broadcasting\WhatsappChannel;
 use App\Enum\WayNotificationEnum;
 use App\Traits\WayAppointmentNotificationTrait;
+use Throwable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -35,15 +36,24 @@ class PrescriptionReadyNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        Log::info('Sending prescription ready notification to patient', [
+        Log::info('Prescription email send attempt', [
             'patient_id' => $notifiable->id,
+            'patient_email' => $notifiable->email ?? null,
             'path' => $this->path,
         ]);
-        return (new MailMessage)
+
+        $message = (new MailMessage)
             ->subject(__('app.notifications.appointment_prescription_ready_subject'))
             ->line(__('app.notifications.appointment_prescription_ready'))
             ->action(__('app.notifications.appointment_download_pdf'), url($this->path))
             ->line(__('app.notifications.appointment_doctor_notification_thanks'));
+
+        Log::info('Prescription email payload built successfully', [
+            'patient_id' => $notifiable->id,
+            'patient_email' => $notifiable->email ?? null,
+        ]);
+
+        return $message;
     }
 
     /**
@@ -79,5 +89,16 @@ class PrescriptionReadyNotification extends Notification
                 url($this->path),
             ],
         ];
+    }
+
+    /**
+     * Log when notification processing fails.
+     */
+    public function failed(Throwable $exception): void
+    {
+        Log::error('Prescription notification failed', [
+            'path' => $this->path,
+            'message' => $exception->getMessage(),
+        ]);
     }
 }
