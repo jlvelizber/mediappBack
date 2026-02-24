@@ -14,6 +14,18 @@ class PrescriptionResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [...parent::toArray($request), 
+        $this->mergeWhen($this->items, [
+                'items' => $this->items->map(function ($item) {
+                    return [
+                        // 'id' => $item->id,
+                        'medication_name' => $item->medication_name,
+                        'dosage' => $item->dosage,
+                        'frequency' => $item->frequency,
+                        'duration' => $item->duration,
+                        'notes' => $item->notes,
+                    ];
+                }),
+            ])];
     }
 }
