@@ -58,7 +58,9 @@ class AppointmentController extends Controller
     public function show(int $id)
     {
         $appointment = $this->appointmentService->getAppointmentById($id);
-        return AppointmentResource::make($appointment)->response();
+        $withPatientResource = false;
+        $gonnaEditAppoint = true;
+        return AppointmentResource::make($appointment, $withPatientResource, $gonnaEditAppoint)->response();
     }
 
 

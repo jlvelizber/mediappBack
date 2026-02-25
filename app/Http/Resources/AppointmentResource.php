@@ -3,11 +3,20 @@
 namespace App\Http\Resources;
 
 use App\Enum\AppointmentStatusEnum;
+use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AppointmentResource extends JsonResource
 {
+    public bool $withPatientResource;
+    public bool $gonnaEditAppoint;
+    public function __construct(Appointment $appointment, bool $withPatientResource = true, bool $gonnaEditAppoint = false)
+    {
+        parent::__construct($appointment);
+        $this->withPatientResource = $withPatientResource;
+        $this->gonnaEditAppoint = $gonnaEditAppoint;
+    }
     /**
      * Transform the resource into an array.
      *
@@ -20,7 +29,12 @@ class AppointmentResource extends JsonResource
             'id' => $this->id,
             'status' => $this->status,
             'status_label' => AppointmentStatusEnum::translateByValue($this->status),
-            'patient' => new PatientResource($this->patient, false),
+            $this->mergeWhen($this->gonnaEditAppoint, [
+                'patient_id' => $this->patient->id,
+            ]),
+            $this->mergeWhen($this->withPatientResource, [
+                'patient' => new PatientResource($this->patient, false),
+            ]),
             'date' => $this->date_time->format('D, d M Y'), // format Mon, 01 Jan 2023, // format Mon, 01 Jan 2023 
             'time' => $this->date_time->format('H:i'),
             'duration_minutes' => $this->duration_minutes,
