@@ -14,6 +14,25 @@ class MedicalRecordRepository extends BaseRepository implements MedicalRecordRep
         parent::__construct($model);
     }
 
+    public function getByDoctorId(int $doctorId): Collection
+    {
+        return $this->model
+            ->whereHas('appointment', function ($query) use ($doctorId) {
+                $query->where('doctor_id', $doctorId);
+            })
+            ->get();
+    }
+
+    public function getByIdAndDoctorId(int $medicalRecordId, int $doctorId): ?MedicalRecord
+    {
+        return $this->model
+            ->where('id', $medicalRecordId)
+            ->whereHas('appointment', function ($query) use ($doctorId) {
+                $query->where('doctor_id', $doctorId);
+            })
+            ->first();
+    }
+
 
     public function getByPatient(int $patientId): ?Collection
     {

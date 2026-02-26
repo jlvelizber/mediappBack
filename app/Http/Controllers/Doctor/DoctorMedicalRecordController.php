@@ -26,7 +26,8 @@ class DoctorMedicalRecordController extends Controller
      */
     public function index(): JsonResponse
     {
-        $histories = $this->medicalRecordService->getAllClinicalHistories();
+        $doctorId = auth()->user()->doctor->id;
+        $histories = $this->medicalRecordService->getAllClinicalHistoriesByDoctorId($doctorId);
         return MedicalRecordResource::collection($histories)->response();
     }
 
@@ -50,7 +51,8 @@ class DoctorMedicalRecordController extends Controller
      */
     public function show(string $id)
     {
-        $clinicalHistory = $this->medicalRecordService->getClinicalHistoryByAppointmentId((int) $id);
+        $doctorId = auth()->user()->doctor->id;
+        $clinicalHistory = $this->medicalRecordService->getClinicalHistoryByAppointmentId((int) $id, $doctorId);
         return MedicalRecordResource::make($clinicalHistory)->response();
     }
 
@@ -59,7 +61,8 @@ class DoctorMedicalRecordController extends Controller
      */
     public function update(UpdateMedicalRecordlHistoryRequest $request, string $id)
     {
-        $clinicalHistory = $this->medicalRecordService->updateClinicalHistory((int) $id, $request->all());
+        $doctorId = $request->user()->doctor->id;
+        $clinicalHistory = $this->medicalRecordService->updateClinicalHistory((int) $id, $request->all(), $doctorId);
         return MedicalRecordResource::make($clinicalHistory)->response();
     }
 
@@ -68,7 +71,8 @@ class DoctorMedicalRecordController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->medicalRecordService->deleteClinicalHistory($id);
+        $doctorId = auth()->user()->doctor->id;
+        $this->medicalRecordService->deleteClinicalHistory((int) $id, $doctorId);
         return response()->json(['message' => 'Clinical history deleted']);
     }
 }

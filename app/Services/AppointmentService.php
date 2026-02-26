@@ -36,11 +36,22 @@ class AppointmentService
         return $this->appointmentRepository->all();
     }
 
-    public function getAppointmentById($id)
+    public function getAllAppointmentsByDoctorId(int $doctorId): Collection
+    {
+        return $this->appointmentRepository->getAllByDoctorId($doctorId);
+    }
+
+    public function getAppointmentById($id, ?int $doctorId = null)
     {
         $appointment = $this->appointmentRepository->find($id);
-        if (!$appointment)
+        if (!$appointment) {
             throw new NotFoundHttpException("Appointment not found", null, Response::HTTP_NOT_FOUND);
+        }
+
+        if ($doctorId !== null && (int) $appointment->doctor_id !== $doctorId) {
+            throw new NotFoundHttpException("Appointment not found", null, Response::HTTP_NOT_FOUND);
+        }
+
         return $appointment;
     }
 
@@ -49,19 +60,19 @@ class AppointmentService
         return $this->appointmentRepository->create($data);
     }
 
-    public function updateAppointment($id, array $data): Appointment|null
+    public function updateAppointment($id, array $data, ?int $doctorId = null): Appointment|null
     {
-        $this->getAppointmentById($id);
+        $this->getAppointmentById($id, $doctorId);
         $wasUpdated = $this->appointmentRepository->update($id, $data);
         if (!$wasUpdated) {
             throw ValidationException::withMessages(['appointment' => 'Appointment was not updated']);
         }
-        return $this->getAppointmentById($id);
+        return $this->getAppointmentById($id, $doctorId);
     }
 
-    public function deleteAppointment($id)
+    public function deleteAppointment($id, ?int $doctorId = null)
     {
-        $this->getAppointmentById($id);
+        $this->getAppointmentById($id, $doctorId);
 
         return $this->appointmentRepository->delete($id);
     }
@@ -94,9 +105,9 @@ class AppointmentService
      * @param int $appointmentId
      * @param string $status
      */
-    public function updateAppointmentStatus(int $appointmentId, string $status): Appointment
+    public function updateAppointmentStatus(int $appointmentId, string $status, ?int $doctorId = null): Appointment
     {
-        $appointment = $this->getAppointmentById($appointmentId);
+        $appointment = $this->getAppointmentById($appointmentId, $doctorId);
 
         $appointment->status = $status;
         if (!$appointment->save()) {

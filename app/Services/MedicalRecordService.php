@@ -26,18 +26,23 @@ class MedicalRecordService
     /**
      * Get all clinical histories
      */
-    public function getAllClinicalHistories()
+    public function getAllClinicalHistoriesByDoctorId(int $doctorId)
     {
-        return $this->medicalRecordRepositoryInterface->all();
+        return $this->medicalRecordRepositoryInterface->getByDoctorId($doctorId);
     }
 
     /**
      * Get clinical history by appointment ID
      * @param int $appointmentId
      */
-    public function getClinicalHistoryByAppointmentId(int $appointmentId): MedicalRecord
+    public function getClinicalHistoryByAppointmentId(int $appointmentId, ?int $doctorId = null): MedicalRecord
     {
-        $clinicalHistory = $this->medicalRecordRepositoryInterface->find($appointmentId);
+        if ($doctorId !== null) {
+            $clinicalHistory = $this->medicalRecordRepositoryInterface->getByIdAndDoctorId($appointmentId, $doctorId);
+        } else {
+            $clinicalHistory = $this->medicalRecordRepositoryInterface->find($appointmentId);
+        }
+
         if (!$clinicalHistory) {
             throw new NotFoundHttpException("Clinical history not found", null, Response::HTTP_NOT_FOUND);
         }
@@ -79,23 +84,23 @@ class MedicalRecordService
      * @param int $id
      * @param array $data
      */
-    public function updateClinicalHistory(int $id, array $data)
+    public function updateClinicalHistory(int $id, array $data, ?int $doctorId = null)
     {
-        $this->getClinicalHistoryByAppointmentId($id);
+        $this->getClinicalHistoryByAppointmentId($id, $doctorId);
         $wasUpdated = $this->medicalRecordRepositoryInterface->update($id, $data);
         if (!$wasUpdated) {
             throw ValidationException::withMessages(['clinical-history' => 'Clinical History was not updated']);
         }
-        return $this->getClinicalHistoryByAppointmentId($id);
+        return $this->getClinicalHistoryByAppointmentId($id, $doctorId);
     }
 
     /**
      * Delete a clinical history entry
      * @param int $id
      */
-    public function deleteClinicalHistory(int $id)
+    public function deleteClinicalHistory(int $id, ?int $doctorId = null)
     {
-        $this->getClinicalHistoryByAppointmentId($id);
+        $this->getClinicalHistoryByAppointmentId($id, $doctorId);
         return $this->medicalRecordRepositoryInterface->delete($id);
     }
 }

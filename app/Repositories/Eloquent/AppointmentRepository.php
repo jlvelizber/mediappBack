@@ -37,6 +37,19 @@ class AppointmentRepository extends BaseRepository implements AppointmentReposit
         return $this->model->create($data);
     }
 
+    public function getAllByDoctorId(int $doctorId): Collection
+    {
+        return $this->model
+            ->where('doctor_id', $doctorId)
+            ->with([
+                'patient' => function ($query) {
+                    $query->select('id', 'name', 'lastname');
+                }
+            ])
+            ->orderBy('date_time', 'desc')
+            ->get();
+    }
+
     /**
      * @param int $doctorId
      * @return mixed

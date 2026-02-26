@@ -27,9 +27,9 @@ class AppointmentController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
+        $doctorId = $request->user()->doctor->id;
         //  vamos a filtrar por fecha si se envían los parámetros start_date y end_date
         if ($request->has('start_date') && $request->has('end_date')) {
-            $doctorId = $request->user()->doctor->id;
             $startDate = $request->get('start_date');
             $endDate = $request->get('end_date');
             $appointments = $this->appointmentService->getAppointmentsByDateRange($doctorId, $startDate, $endDate);
@@ -37,7 +37,7 @@ class AppointmentController extends Controller
         }
 
 
-        $appointments = $this->appointmentService->getAllAppointments();
+        $appointments = $this->appointmentService->getAllAppointmentsByDoctorId($doctorId);
         return AppointmentResource::collection($appointments)->response();
     }
 
@@ -57,7 +57,8 @@ class AppointmentController extends Controller
      */
     public function show(int $id)
     {
-        $appointment = $this->appointmentService->getAppointmentById($id);
+        $doctorId = auth()->user()->doctor->id;
+        $appointment = $this->appointmentService->getAppointmentById($id, $doctorId);
         $withPatientResource = false;
         $gonnaEditAppoint = true;
         return AppointmentResource::make($appointment, $withPatientResource, $gonnaEditAppoint)->response();
@@ -71,7 +72,7 @@ class AppointmentController extends Controller
     {
         $doctorId = $request->user()->doctor->id;
         $request->merge(['doctor_id' => $doctorId]);
-        $appointment = $this->appointmentService->updateAppointment($id, $request->all());
+        $appointment = $this->appointmentService->updateAppointment($id, $request->all(), $doctorId);
         return AppointmentResource::make($appointment)->response();
     }
 
@@ -80,7 +81,8 @@ class AppointmentController extends Controller
      */
     public function destroy(int $appointment)
     {
-        $this->appointmentService->deleteAppointment($appointment);
+        $doctorId = auth()->user()->doctor->id;
+        $this->appointmentService->deleteAppointment($appointment, $doctorId);
         return response()->json(['message' => 'Appointment deleted']);
     }
 
@@ -113,10 +115,11 @@ class AppointmentController extends Controller
      */
     public function updateStatus(AppointmentChangeStatusRequest $request, int $appointment): JsonResponse
     {
+        $doctorId = $request->user()->doctor->id;
         $status = $request->input('status');
         $wasOk = false;
         try {
-            $appointment = $this->appointmentService->updateAppointmentStatus($appointment, $status);
+            $appointment = $this->appointmentService->updateAppointmentStatus($appointment, $status, $doctorId);
             if ($appointment) {
                 $wasOk = true;
             }

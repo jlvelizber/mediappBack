@@ -9,6 +9,13 @@ use Illuminate\Pagination\LengthAwarePaginator;
 interface AppointmentRepositoryInterface extends RootRepositoryInterface
 {
     /**
+     * Get all appointments by doctor id
+     * @param int $doctorId
+     * @return Collection
+     */
+    public function getAllByDoctorId(int $doctorId): Collection;
+
+    /**
      * @param int $doctorId
      * @return Collection
      */
@@ -25,7 +32,7 @@ interface AppointmentRepositoryInterface extends RootRepositoryInterface
     /**
      * Summary of getDoctorAppointments
      * @param int $doctorId
-     * @return Collection<Model>
+     * @return Collection
      */
     public function getDoctorAppointmentsByDate(int $doctorId, Carbon $date): ?Collection;
 
