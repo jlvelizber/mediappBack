@@ -16,7 +16,6 @@ use App\Http\Controllers\Doctor\DoctorDashboardController;
 use App\Http\Controllers\Doctor\DoctorMedicalRecordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
 
 require __DIR__ . '/auth.php';
 
@@ -96,11 +95,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     });
 });
-
-
-Route::resource('users', UserController::class);
-
-Route::get('/appointments/{doctorId}/future', [DoctorAppointmentController::class, 'futureAppointments']);
-
 
 
