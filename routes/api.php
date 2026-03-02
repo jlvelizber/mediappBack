@@ -8,7 +8,8 @@ use App\Http\Controllers\Doctor\{
     DoctorAvailabilityController as DoctorDoctorAvailabilityController,
     AppointmentController as DoctorAppointmentController,
     PatientController as DoctorPatientController,
-    DoctorPrescriptionController
+    DoctorPrescriptionController,
+    DoctorProfileController
 };
 use App\Http\Controllers\Admin\DoctorController;
 
@@ -48,6 +49,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::middleware(['role:doctor'])->group(function () {
 
         Route::get('/dashboard', [DoctorDashboardController::class,'index']);
+        Route::get('/profile', [DoctorProfileController::class, 'show']);
+        Route::put('/profile', [DoctorProfileController::class, 'update']);
+        Route::put('/profile/password', [DoctorProfileController::class, 'updatePassword']);
 
         // available times for the doctor
         Route::apiResource(
