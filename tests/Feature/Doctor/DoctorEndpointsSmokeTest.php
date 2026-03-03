@@ -25,6 +25,8 @@ class DoctorEndpointsSmokeTest extends TestCase
         '/api/appointments/paginate',
         '/api/medical-record',
         '/api/availabilities',
+        '/api/doctor/settings',
+        '/api/profile',
     ];
 
     public function test_doctor_endpoints_require_authentication(): void
