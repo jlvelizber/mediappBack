@@ -1,0 +1,46 @@
+#!/bin/sh
+set -e
+
+if [ "${WAIT_FOR_DB:-true}" = "true" ]; then
+  echo "Waiting for database connection..."
+  ATTEMPTS=0
+  until php -r "
+    \$host = getenv('DB_HOST') ?: 'db';
+    \$port = getenv('DB_PORT') ?: '3306';
+    \$db = getenv('DB_DATABASE') ?: 'mediapp';
+    \$user = getenv('DB_USERNAME') ?: 'root';
+    \$pass = getenv('DB_PASSWORD') ?: '';
+    try {
+      new PDO(\"mysql:host=\$host;port=\$port;dbname=\$db\", \$user, \$pass);
+      exit(0);
+    } catch (Throwable \$e) {
+      exit(1);
+    }
+  "; do
+    ATTEMPTS=$((ATTEMPTS + 1))
+    if [ "$ATTEMPTS" -ge 30 ]; then
+      echo "Database not reachable after ${ATTEMPTS} attempts."
+      exit 1
+    fi
+    sleep 2
+  done
+  echo "Database is ready."
+fi
+
+if [ "${RUN_MIGRATIONS:-false}" = "true" ]; then
+  echo "Running migrations..."
+  php artisan migrate --force
+fi
+
+if [ "${RUN_STORAGE_LINK:-false}" = "true" ]; then
+  php artisan storage:link || true
+fi
+
+if [ "${CREATE_APP_KEY:-false}" = "true" ]; then
+  php artisan key:generate
+  php artisan config:clear
+  php artisan route:clear
+  php artisan cache:clear
+fi
+
+exec "$@"
