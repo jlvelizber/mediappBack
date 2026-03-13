@@ -9,3 +9,5 @@ storage/framework/views
 public/storage
 Dockerfile
 docker-compose.yml
+bootstrap/cache/*.php
+!bootstrap/cache/.gitignore

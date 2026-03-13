@@ -3,17 +3,35 @@ FROM composer:2 AS vendor
 WORKDIR /var/www/html
 
 COPY composer.json composer.lock ./
-RUN composer install \
-    --no-dev \
-    --prefer-dist \
-    --no-interaction \
-    --no-progress \
-    --no-scripts \
-    --ignore-platform-req=ext-bcmath \
-    --optimize-autoloader
+ARG INSTALL_DEV=false
+RUN if [ "$INSTALL_DEV" = "true" ]; then \
+      composer install \
+      --prefer-dist \
+      --no-interaction \
+      --no-progress \
+      --no-scripts \
+      --ignore-platform-req=php \
+      --ignore-platform-req=ext-bcmath \
+      --optimize-autoloader; \
+    else \
+      composer install \
+      --no-dev \
+      --prefer-dist \
+      --no-interaction \
+      --no-progress \
+      --no-scripts \
+      --ignore-platform-req=php \
+      --ignore-platform-req=ext-bcmath \
+      --optimize-autoloader; \
+    fi
 
 COPY . .
-RUN composer dump-autoload --optimize --no-dev --no-interaction
+RUN rm -f bootstrap/cache/*.php \
+    && if [ "$INSTALL_DEV" = "true" ]; then \
+      composer dump-autoload --optimize --no-interaction; \
+    else \
+      composer dump-autoload --optimize --no-dev --no-interaction --no-scripts; \
+    fi
 
 
 FROM php:8.3-cli

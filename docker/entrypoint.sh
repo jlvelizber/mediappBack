@@ -1,6 +1,18 @@
 #!/bin/sh
 set -e
 
+# Ensure Laravel writable/cache directories exist on every start.
+# This prevents runtime errors like "Please provide a valid cache path."
+mkdir -p \
+  storage/logs \
+  storage/framework/cache/data \
+  storage/framework/sessions \
+  storage/framework/views \
+  bootstrap/cache
+
+chown -R www-data:www-data storage bootstrap/cache || true
+chmod -R ug+rwX storage bootstrap/cache || true
+
 if [ "${WAIT_FOR_DB:-true}" = "true" ]; then
   echo "Waiting for database connection..."
   ATTEMPTS=0
