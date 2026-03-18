@@ -6,7 +6,12 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\SetupController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/setup/status', [SetupController::class, 'status']);
+Route::post('/setup/initialize', [SetupController::class, 'initialize'])
+    ->middleware(['setup.open', 'throttle:10,1']);
 
 Route::post('/register', [RegisteredUserController::class, 'store'])
     ->middleware('guest')

@@ -11,6 +11,8 @@ class DoctorConfiguration extends Model
     use HasFactory;
 
     protected $fillable = [
+        'doctor_id',
+        'setup_completed_at',
         'default_appointment_duration',
         'default_appointment_price',
         'default_appointment_currency',
@@ -26,4 +28,13 @@ class DoctorConfiguration extends Model
         'notification_way',
         'reminder_hour_appointment'
     ];
+
+    protected $casts = [
+        'setup_completed_at' => 'datetime',
+    ];
+
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class);
+    }
 }
