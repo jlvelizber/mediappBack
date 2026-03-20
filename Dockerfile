@@ -34,7 +34,7 @@ RUN rm -f bootstrap/cache/*.php \
     fi
 
 
-FROM php:8.3-cli
+FROM php:8.3-fpm
 
 WORKDIR /var/www/html
 
@@ -57,7 +57,7 @@ RUN sed -i 's/\r$//' /usr/local/bin/entrypoint.sh \
     && mkdir -p storage/logs bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache
 
-EXPOSE 8000
+EXPOSE 9000
 
 ENTRYPOINT ["entrypoint.sh"]
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+CMD ["php-fpm", "-F"]

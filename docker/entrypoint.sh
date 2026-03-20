@@ -1,6 +1,30 @@
 #!/bin/sh
 set -e
 
+# Keep Laravel .env aligned with Docker DB variables.
+# php artisan serve may not expose all DB_* vars to worker processes.
+set_or_append_env() {
+  key="$1"
+  value="$2"
+
+  if [ -z "$value" ]; then
+    return 0
+  fi
+
+  if awk -F= -v k="$key" '$1 == k { found=1 } END { exit !found }' .env; then
+    sed -i "s|^${key}=.*|${key}=${value}|" .env
+  else
+    printf '%s=%s\n' "$key" "$value" >> .env
+  fi
+}
+
+set_or_append_env "DB_CONNECTION" "${DB_CONNECTION:-}"
+set_or_append_env "DB_HOST" "${DB_HOST:-}"
+set_or_append_env "DB_PORT" "${DB_PORT:-}"
+set_or_append_env "DB_DATABASE" "${DB_DATABASE:-}"
+set_or_append_env "DB_USERNAME" "${DB_USERNAME:-}"
+set_or_append_env "DB_PASSWORD" "${DB_PASSWORD:-}"
+
 # Ensure Laravel writable/cache directories exist on every start.
 # This prevents runtime errors like "Please provide a valid cache path."
 mkdir -p \
