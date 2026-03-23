@@ -79,4 +79,8 @@ if [ "${CREATE_APP_KEY:-false}" = "true" ]; then
   php artisan cache:clear
 fi
 
+# Artisan above runs as root; log files would be root-owned and php-fpm (www-data) could not append.
+chown -R www-data:www-data storage bootstrap/cache || true
+chmod -R ug+rwX storage bootstrap/cache || true
+
 exec "$@"
