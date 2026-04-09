@@ -28,6 +28,8 @@ set_or_append_env "DB_PASSWORD" "${DB_PASSWORD:-}"
 # Ensure Laravel writable/cache directories exist on every start.
 # This prevents runtime errors like "Please provide a valid cache path."
 mkdir -p \
+  storage/app/private \
+  storage/app/public \
   storage/logs \
   storage/framework/cache/data \
   storage/framework/sessions \
